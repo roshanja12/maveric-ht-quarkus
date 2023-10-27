@@ -10,11 +10,11 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @ApplicationPath("/")
 @OpenAPIDefinition(
-        info = @Info(title = "Saving Account Api",
-                description = "Manage Saving Accounts and Transactions Operations",
+        info = @Info(title = "Savings_Account_Api",
+                description = "Manage Saving Accounts and Transactions",
                 version = "1.0",
                 contact = @Contact(name = "@mock",url = "https://mock")),
-        externalDocs = @ExternalDocumentation( description= "All saving account api code mention below",url = "https://mock"),
+        externalDocs = @ExternalDocumentation( description= "All save account api code mention below",url = "https://mock"),
         tags= {
                 @Tag(name = "Saving Account Api", description = "Public API"),
                 @Tag(name = "Saving Account Api", description = "Public API")

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
@@ -17,8 +18,8 @@ public class Transaction {
     private Long id;
     private Instant date;
     private String description;
-    private String amount;
-    private Long balance;
+    private BigDecimal amount;
+    private BigDecimal balance;
     private TransactionType type;
     @JoinColumn(name = "saving_account_id")
     @ManyToOne

@@ -27,9 +27,9 @@ public class SavingAccount {
     @Column(nullable = false)
     private BigDecimal minOpeningBalance;
     @Column(nullable = false)
-    private String interestCompoundPeriod;
+    private InterestCompoundPeriod interestCompoundPeriod;
     @Column(nullable = false)
-    private Boolean allowOverDraft;
+    private Boolean isAllowOverDraft;
     private BigDecimal overDraftLimit;
     private byte[] documents;
     private Instant createdDate;

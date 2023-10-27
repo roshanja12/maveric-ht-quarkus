@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.maveric.quarkus.panache.model.InterestCompoundPeriod;
 
 import java.math.BigDecimal;
 
@@ -21,9 +22,9 @@ public class SavingAccountRequestDto {
     @Schema(required = true)
     private BigDecimal minOpeningBalance;
     @Schema(required = true)
-    private String interestCompoundPeriod;
+    private InterestCompoundPeriod interestCompoundPeriod;
     @Schema(required = true)
-    private Boolean allowOverDraft;
-    @Schema(required = true)
+    private Boolean isAllowOverDraft;
+    @Schema(required = false)
     private BigDecimal overDraftLimit;
 }
