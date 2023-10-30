@@ -23,7 +23,9 @@ public class SavingAccount {
     @Column(nullable = false)
     private String customerName;
     @Column(nullable = false)
-    private String phoneNumber;
+    private String customerEmail;
+    @Column(nullable = false)
+    private Integer customerPhone;
     @Column(nullable = false)
     private BigDecimal minOpeningBalance;
     @Column(nullable = false)
@@ -36,6 +38,7 @@ public class SavingAccount {
     private Instant updatedDate;
     @Column(nullable = false)
     private Long balance;
+    @Enumerated(EnumType.STRING)
     private SavingAccountStatus status;
     @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaction> transactions;
