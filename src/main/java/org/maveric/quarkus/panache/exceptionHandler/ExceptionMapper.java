@@ -11,7 +11,7 @@ public class ExceptionMapper implements jakarta.ws.rs.ext.ExceptionMapper<Except
     public Response toResponse(Exception e) {
         ErrorResponse.ErrorMessage errorMessages =
                 new ErrorResponse.ErrorMessage("path", e.getMessage());
-        return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(errorMessages)).build();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorResponse(errorMessages)).build();
     }
 
 }

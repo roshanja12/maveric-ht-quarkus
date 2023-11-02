@@ -4,7 +4,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.maveric.quarkus.panache.dtos.ResponseDto;
@@ -17,7 +16,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static jakarta.xml.bind.DatatypeConverter.parseInt;
 import static org.maveric.quarkus.panache.common.SavingAccountConstant.*;
@@ -29,12 +27,13 @@ import static org.maveric.quarkus.panache.common.UtilsMethods.isNumeric;
 @ApplicationScoped
 public class SavingAccountServices {
 
-    public static final String QUERY_NUMERIC=" WHERE  customerId = ?1 OR customerPhone = ?1 OR ORDER BY savingsAccountId DESC ";
+    public static final String QUERY_NUMERIC = " WHERE  customerId = ?1 OR customerPhone = ?1  ORDER BY savingsAccountId DESC ";
 
-    public static final String QUERY_NOT_NUMERIC=" WHERE customerName = ?1 OR customerEmail = ?1  ORDER BY savingsAccountId DESC ";
+    public static final String QUERY_NOT_NUMERIC = " WHERE customerName = ?1 OR customerEmail = ?1  ORDER BY savingsAccountId DESC ";
 
-
+    public static final String NON_SEARCH_QUERY = " ORDER BY savingsAccountId DESC ";
     SavingAccountRepository savingAccountRepository;
+
     public SavingAccountServices(SavingAccountRepository savingAccountRepository) {
         this.savingAccountRepository = savingAccountRepository;
     }
@@ -90,12 +89,17 @@ public class SavingAccountServices {
             if (index != 0) {
                 index *= size;
             }
-            if (isNumeric(search)) {
+            log.info(search);
+            if (search==null) {
+                query =NON_SEARCH_QUERY ;
+                queryResult = savingAccountRepository.find(query);
+            }
+           else if (isNumeric(search)) {
                 query = QUERY_NUMERIC;
-                queryResult = savingAccountRepository.find(query,parseInt(search));
+                queryResult = savingAccountRepository.find(query, parseInt(search));
             } else {
                 query = QUERY_NOT_NUMERIC;
-                queryResult = savingAccountRepository.find(query,search);
+                queryResult = savingAccountRepository.find(query, search);
             }
 
             log.info("Request param :: page {}, size {}", page, size);

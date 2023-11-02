@@ -1,9 +1,11 @@
 package org.maveric.quarkus.panache.exceptionHandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -13,6 +15,12 @@ public class ErrorResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String errorId;
     private List<ErrorMessage> errors;
+    private String status = "Failed";
+    private String message;
+    private Integer code = HttpResponseStatus.INTERNAL_SERVER_ERROR.code();
+    private String path;
+    private Instant timeStamp = Instant.now();
+    private Object data;
 
     public ErrorResponse(String errorId, ErrorMessage errorMessage) {
         this.errorId = errorId;
