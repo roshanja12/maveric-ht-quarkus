@@ -70,7 +70,7 @@ public class SavingAccountServices {
 
     }
 
-    public ResponseDto getSavingAccount(Integer pageNumber, Integer pageSize, String search) {
+    public ResponseDto getSavingAccount(Integer pageNumber, Integer size, String search) {
         log.info("Request param :: page {}, size {}", pageNumber, pageSize);
         ResponseDto responseDto = null;
         try {
@@ -81,8 +81,6 @@ public class SavingAccountServices {
             if (page != 0) {
                 index = page - 1;
             }
-
-            Integer size = pageSize;
             if (index != 0) {
                 index *= size;
             }
