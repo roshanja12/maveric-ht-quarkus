@@ -33,12 +33,14 @@ public class SavingAccountServices {
 
     public static final String QUERY_NOT_NUMERIC=" WHERE customerName = ?1 OR customerEmail = ?1  ORDER BY savingsAccountId DESC ";
 
-    @Inject
-    SavingAccountRepository savingAccountRepository;
 
+    SavingAccountRepository savingAccountRepository;
+    public SavingAccountServices(SavingAccountRepository savingAccountRepository) {
+        this.savingAccountRepository = savingAccountRepository;
+    }
 
     @Transactional
-    public ResponseDto UpdateAccountsDetails(UpdateAccountsRequestDto updateAccountsRequestDto) {
+    public ResponseDto updateAccountsDetails(UpdateAccountsRequestDto updateAccountsRequestDto) {
         log.info("SavingAccountServices :: getSavingAccount :: started time " + Instant.now());
         log.info("Request  ::  {}", updateAccountsRequestDto);
         ResponseDto responseDto = null;
@@ -73,7 +75,6 @@ public class SavingAccountServices {
     public ResponseDto getSavingAccount(Integer pageNumber, Integer pageSize, String search) {
         log.info("SavingAccountServices :: getSavingAccount :: started time " + Instant.now());
         log.info("Request param :: page {}, size {}", pageNumber, pageSize);
-        System.out.println("inside src saving repository="+savingAccountRepository);
         ResponseDto responseDto = null;
         try {
             String query = null;
@@ -90,26 +91,16 @@ public class SavingAccountServices {
                 index *= size;
             }
             if (isNumeric(search)) {
-                //  WHERE  customerId = ?2 OR customerPhone = ?2 OR ORDER BY savingsAccountId DESC
-                System.out.println("****inside where block");
                 query = QUERY_NUMERIC;
-                System.out.println("**search="+parseInt(search));
                 queryResult = savingAccountRepository.find(query,parseInt(search));
             } else {
-                System.out.println("****insid eorder by query block");
                 query = QUERY_NOT_NUMERIC;
                 queryResult = savingAccountRepository.find(query,search);
-                //queryResult = savingAccountRepository.find(query.trim());
-                System.out.println("query result="+queryResult);
             }
 
             log.info("Request param :: page {}, size {}", page, size);
-            System.out.println("*** index="+index+",size="+size);
             List<SavingAccount> savingAccountList = queryResult.page(Page.of(index, size)).list();
-         //   ArgumentMatcher<Page>pageMatcher=(pageArg)->(pageArg.index==page.index) && (pageArg.size==page.size);
-            //        Mockito.when( query.page(Mockito.any(Page.class))).thenReturn(query);
-
-            if (savingAccountList.size() == 0) {
+            if (savingAccountList.isEmpty()) {
                 throw new SavingDetailsNotFoundException("Saving accounts details not found");
             }
 

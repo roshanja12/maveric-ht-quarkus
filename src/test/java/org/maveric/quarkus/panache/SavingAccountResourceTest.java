@@ -15,7 +15,7 @@ import static org.maveric.quarkus.panache.common.SavingAccountConstant.GET_ACCOU
 import static org.maveric.quarkus.panache.common.SavingAccountConstant.UPDATE_ACCOUNTS_PATH;
 
 @QuarkusTest
-public class SavingAccountResourceTest {
+ public class SavingAccountResourceTest {
 
     private UpdateAccountsRequestDto updateAccountsRequestDto;
 
@@ -29,7 +29,7 @@ public class SavingAccountResourceTest {
     }
 
     @Test
-    public void test_update_account_details() {
+     void test_update_account_details() {
         given()
                 .contentType(ContentType.JSON)
                 .body(updateAccountsRequestDto)
@@ -40,7 +40,7 @@ public class SavingAccountResourceTest {
     }
 
     @Test
-    public void test_get_account_details() {
+     void test_get_account_details() {
         given()
                 .param("page", 0)
                 .param("size", 1)

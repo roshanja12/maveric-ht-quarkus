@@ -25,10 +25,10 @@ import org.maveric.quarkus.panache.services.SavingAccountServices;
 @Tag(name = "Saving Account End Points")
 public class SavingAccountResource {
 
-
-    @Inject
     SavingAccountServices services;
-
+    public SavingAccountResource(SavingAccountServices services) {
+        this.services = services;
+    }
 
     @POST
     @Operation(summary = "This Api creates saving account for customer")
@@ -48,7 +48,6 @@ public class SavingAccountResource {
         ResponseDto responseDto = new ResponseDto();
         if (responseDto == null) {
             responseDto.setStatus("Success");
-            // responseDto.setCode(CustomHttpStatus.ACCEPTED);
             responseDto.setMessage("Account Created Successfully");
             responseDto.setError(null);
             responseDto.setPath("/api/v1/accounts/saving");
@@ -77,8 +76,8 @@ public class SavingAccountResource {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseDto.class))
                     }),})
-    public Response UpdateAccountsDetails(@RequestBody @Valid UpdateAccountsRequestDto updateAccountsRequestDto) {
-        return Response.status(HttpResponseStatus.OK.code()).entity(services.UpdateAccountsDetails(updateAccountsRequestDto)).build();
+    public Response updateAccountsDetails(@RequestBody @Valid UpdateAccountsRequestDto updateAccountsRequestDto) {
+        return Response.status(HttpResponseStatus.OK.code()).entity(services.updateAccountsDetails(updateAccountsRequestDto)).build();
     }
 
     @GET

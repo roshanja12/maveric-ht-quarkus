@@ -116,20 +116,20 @@ class SavingAccountServiceTest {
     @Test
     public void update_account_details_if_data_not_found() {
         Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
-        Assertions.assertThrows(RuntimeException.class, () -> resource.UpdateAccountsDetails(updateAccountsRequestDto));
+        Assertions.assertThrows(RuntimeException.class, () -> resource.updateAccountsDetails(updateAccountsRequestDto));
     }
 
     @Test
     public void update_account_details_of_status() {
         Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
-        resource.UpdateAccountsDetails(updateAccountsRequestDto);
+        resource.updateAccountsDetails(updateAccountsRequestDto);
     }
 
     @Test
     public void update_account_details_of_over_draft() {
         Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
         updateAccountsRequestDto.setIsAllowOverDraft(null);
-        resource.UpdateAccountsDetails(updateAccountsRequestDto);
+        resource.updateAccountsDetails(updateAccountsRequestDto);
     }
 
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.hibernate.validator.constraints.Length;
 import org.maveric.quarkus.panache.model.SavingAccountStatus;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 public class UpdateAccountsRequestDto {
 
     @Schema(required = true)
-    //@Min(value = 3,message = "Please enter a valid account id ")
+    @Min(value = 1)
     private Long savingAccountId;
     private Boolean isAllowOverDraft;
     private BigDecimal overDraftLimit;
