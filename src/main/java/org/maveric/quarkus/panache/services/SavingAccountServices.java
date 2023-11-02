@@ -40,7 +40,6 @@ public class SavingAccountServices {
 
     @Transactional
     public ResponseDto updateAccountsDetails(UpdateAccountsRequestDto updateAccountsRequestDto) {
-        log.info("SavingAccountServices :: getSavingAccount :: started time " + Instant.now());
         log.info("Request  ::  {}", updateAccountsRequestDto);
         ResponseDto responseDto = null;
         try {
@@ -63,10 +62,8 @@ public class SavingAccountServices {
                     UPDATED_SUCCESS_RESPONSE_MSG, null, SAVING_ACCOUNTS_URL_PATH);
 
             log.info("Response :: {} ", responseDto);
-            log.info("SavingAccountServices calling :: getSavingAccount :: end time " + Instant.now());
         } catch (Exception e) {
             log.error("error :: " + e.getMessage());
-            log.info("SavingAccountServices :: getSavingAccount :: end time " + Instant.now());
             throw e;
         }
         return responseDto;
@@ -74,7 +71,6 @@ public class SavingAccountServices {
     }
 
     public ResponseDto getSavingAccount(Integer pageNumber, Integer pageSize, String search) {
-        log.info("SavingAccountServices :: getSavingAccount :: started time " + Instant.now());
         log.info("Request param :: page {}, size {}", pageNumber, pageSize);
         ResponseDto responseDto = null;
         try {
@@ -87,7 +83,6 @@ public class SavingAccountServices {
             }
 
             Integer size = pageSize;
-
             if (index != 0) {
                 index *= size;
             }
@@ -120,11 +115,9 @@ public class SavingAccountServices {
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
                     GET_SUCCESS_RESPONSE_MSG, responseData, SAVING_ACCOUNTS_URL_PATH);
             log.info("Response :: {} ", responseDto);
-            log.info("SavingAccountServices calling :: getSavingAccount :: end time " + Instant.now());
 
         } catch (Exception e) {
             log.error("error :: " + e.getMessage());
-            log.info("SavingAccountServices :: getSavingAccount :: end time " + Instant.now());
             throw e;
         }
         return responseDto;
