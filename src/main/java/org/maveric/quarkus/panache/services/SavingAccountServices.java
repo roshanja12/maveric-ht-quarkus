@@ -58,7 +58,7 @@ public class SavingAccountServices {
             }
             savingAccountRepository.persist(savingAccount);
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
-                    UPDATED_SUCCESS_RESPONSE_MSG, null, GET_ACCOUNTS_PATH);
+                    UPDATED_SUCCESS_RESPONSE_MSG, null, SAVING_ACCOUNTS_URL_PATH);
 
             log.info("Response :: {} ", responseDto);
             log.info("SavingAccountServices calling :: getSavingAccount :: end time " + Instant.now());
@@ -115,7 +115,7 @@ public class SavingAccountServices {
             responseData.put("savingAccounts", savingAccountList);
 
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
-                    GET_SUCCESS_RESPONSE_MSG, responseData, GET_ACCOUNTS_PATH);
+                    GET_SUCCESS_RESPONSE_MSG, responseData, SAVING_ACCOUNTS_URL_PATH);
             log.info("Response :: {} ", responseDto);
             log.info("SavingAccountServices calling :: getSavingAccount :: end time " + Instant.now());
 

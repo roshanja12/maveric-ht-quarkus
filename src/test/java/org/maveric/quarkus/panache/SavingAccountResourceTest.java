@@ -11,8 +11,8 @@ import org.maveric.quarkus.panache.model.SavingAccountStatus;
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
-import static org.maveric.quarkus.panache.common.SavingAccountConstant.GET_ACCOUNTS_PATH;
-import static org.maveric.quarkus.panache.common.SavingAccountConstant.UPDATE_ACCOUNTS_PATH;
+import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_ACCOUNTS_URL_PATH;
+import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_ACCOUNTS_URL_PATH;
 
 @QuarkusTest
  public class SavingAccountResourceTest {
@@ -34,7 +34,7 @@ import static org.maveric.quarkus.panache.common.SavingAccountConstant.UPDATE_AC
                 .contentType(ContentType.JSON)
                 .body(updateAccountsRequestDto)
                 .when()
-                .put(UPDATE_ACCOUNTS_PATH)
+                .put(SAVING_ACCOUNTS_URL_PATH)
                 .then()
                 .statusCode(HttpResponseStatus.OK.code());
     }
@@ -45,7 +45,7 @@ import static org.maveric.quarkus.panache.common.SavingAccountConstant.UPDATE_AC
                 .param("page", 0)
                 .param("size", 1)
                 .when()
-                .get(GET_ACCOUNTS_PATH)
+                .get(SAVING_ACCOUNTS_URL_PATH)
                 .then()
                 .statusCode(400);
     }
