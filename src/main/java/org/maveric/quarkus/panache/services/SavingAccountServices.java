@@ -57,6 +57,7 @@ public class SavingAccountServices {
                 savingAccount.setIsAllowOverDraft(updateAccountsRequestDto.getIsAllowOverDraft());
                 savingAccount.setOverDraftLimit(updateAccountsRequestDto.getOverDraftLimit());
             }
+            savingAccount.setUpdatedDate(Instant.now());
             savingAccountRepository.persist(savingAccount);
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
                     UPDATED_SUCCESS_RESPONSE_MSG, null, SAVING_ACCOUNTS_URL_PATH);
