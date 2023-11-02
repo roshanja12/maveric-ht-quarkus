@@ -47,6 +47,7 @@ public class SavingAccountServices {
             SavingAccount savingAccount = savingAccountRepository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId());
 
             if (savingAccount == null) {
+                log.error("Saving account detail not present in db");
                 throw new SavingDetailsNotFoundException("Saving account details not found for this id " + updateAccountsRequestDto.getSavingAccountId());
             }
 
@@ -105,6 +106,7 @@ public class SavingAccountServices {
             log.info("Request param :: page {}, size {}", page, size);
             List<SavingAccount> savingAccountList = queryResult.page(Page.of(index, size)).list();
             if (savingAccountList.isEmpty()) {
+                log.error("Saving account details not present in db");
                 throw new SavingDetailsNotFoundException("Saving accounts details not found");
             }
 
@@ -120,7 +122,7 @@ public class SavingAccountServices {
             log.info("SavingAccountServices calling :: getSavingAccount :: end time " + Instant.now());
 
         } catch (Exception e) {
-            log.info("error :: " + e.getMessage());
+            log.error("error :: " + e.getMessage());
             log.info("SavingAccountServices :: getSavingAccount :: end time " + Instant.now());
             throw e;
         }
