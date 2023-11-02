@@ -19,8 +19,7 @@ import java.util.Map;
 
 import static jakarta.xml.bind.DatatypeConverter.parseInt;
 import static org.maveric.quarkus.panache.common.SavingAccountConstant.*;
-import static org.maveric.quarkus.panache.common.UtilsMethods.getResponseStructure;
-import static org.maveric.quarkus.panache.common.UtilsMethods.isNumeric;
+import static org.maveric.quarkus.panache.common.UtilsMethods.*;
 
 /* @author meleto sofiya */
 @Slf4j
@@ -71,19 +70,13 @@ public class SavingAccountServices {
     }
 
     public ResponseDto getSavingAccount(Integer pageNumber, Integer size, String search) {
-        log.info("Request param :: page {}, size {}", pageNumber, pageSize);
+        log.info("Request param :: page {}, size {}", pageNumber, size);
         ResponseDto responseDto = null;
         try {
             String query = null;
             PanacheQuery<SavingAccount> queryResult = null;
             Integer page = pageNumber;
-            Integer index = page;
-            if (page != 0) {
-                index = page - 1;
-            }
-            if (index != 0) {
-                index *= size;
-            }
+            Integer index= getPageIndexValue(page,size);
             log.info(search);
             if (search==null) {
                 query =NON_SEARCH_QUERY ;
@@ -97,7 +90,6 @@ public class SavingAccountServices {
                 queryResult = savingAccountRepository.find(query, search);
             }
 
-            log.info("Request param :: page {}, size {}", page, size);
             List<SavingAccount> savingAccountList = queryResult.page(Page.of(index, size)).list();
             if (savingAccountList.isEmpty()) {
                 log.error("Saving account details not present in db");
@@ -120,6 +112,8 @@ public class SavingAccountServices {
         }
         return responseDto;
     }
+
+
 
 
 }

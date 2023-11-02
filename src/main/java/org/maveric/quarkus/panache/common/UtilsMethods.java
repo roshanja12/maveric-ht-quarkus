@@ -28,4 +28,16 @@ public class UtilsMethods {
         }
         return true;
     }
+    public static Integer getPageIndexValue(Integer page, Integer size) {
+        Integer index=null;
+        if (page != 0) {
+            index = page - 1;
+            if (index != 0) {
+                index *= size;
+            }
+        }
+        return index;
+    }
+
+
 }
