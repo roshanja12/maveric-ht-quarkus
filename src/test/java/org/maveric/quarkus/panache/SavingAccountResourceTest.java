@@ -6,12 +6,11 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
-import org.maveric.quarkus.panache.model.SavingAccountStatus;
+import org.maveric.quarkus.panache.enums.SavingAccountStatus;
 
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
-import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_ACCOUNTS_URL_PATH;
 import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_ACCOUNTS_URL_PATH;
 
 @QuarkusTest

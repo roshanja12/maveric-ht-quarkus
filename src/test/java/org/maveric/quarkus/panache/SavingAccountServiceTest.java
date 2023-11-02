@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
 import org.maveric.quarkus.panache.exceptionHandler.SavingDetailsNotFoundException;
 import org.maveric.quarkus.panache.model.SavingAccount;
-import org.maveric.quarkus.panache.model.SavingAccountStatus;
+import org.maveric.quarkus.panache.enums.SavingAccountStatus;
 import org.maveric.quarkus.panache.repository.SavingAccountRepository;
 import org.maveric.quarkus.panache.services.SavingAccountServices;
 import org.mockito.ArgumentMatcher;

@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.hibernate.validator.constraints.Length;
-import org.maveric.quarkus.panache.model.SavingAccountStatus;
+import org.maveric.quarkus.panache.enums.SavingAccountStatus;
 
 import java.math.BigDecimal;
 
