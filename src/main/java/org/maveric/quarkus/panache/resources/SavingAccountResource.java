@@ -84,7 +84,7 @@ public class SavingAccountResource {
     @Operation(summary = "This Api to get all saving account details ")
     @APIResponses({@APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
             @APIResponse(responseCode = "500", description = "Internal Server Error: An unexpected error occurred"),
-            @APIResponse(responseCode = "200", description = "Account Created Successfully",
+            @APIResponse(responseCode = "200", description = "Data render successfully",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -97,6 +97,44 @@ public class SavingAccountResource {
                                     @QueryParam("search") String search
     ) {
         return Response.status(HttpResponseStatus.OK.code()).entity(services.getSavingAccount(page, size, search)).build();
+    }
+
+    @GET
+    @Path("/{accountId}")
+    @Operation(summary = "This Api to get saving account details based on accountId")
+    @APIResponses({@APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error: An unexpected error occurred"),
+            @APIResponse(responseCode = "200", description = "Data render successfully",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseDto.class))
+                    }),
+            @APIResponse(responseCode = "401", description = "Unauthorized request"),
+            @APIResponse(responseCode = "404", description = "Resources not found"),})
+    public Response getSavingAccountDetailBasedOnAccountId(Long accountId
+
+    ) {
+        return Response.status(HttpResponseStatus.OK.code()).entity(services.getSavingAccountDetailBasedOnAccountId(accountId)).build();
+    }
+
+    @GET
+    @Path("/{customerId}")
+    @Operation(summary = "This Api to get saving account details based on customerId")
+    @APIResponses({@APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error: An unexpected error occurred"),
+            @APIResponse(responseCode = "200", description = "Data render successfully",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseDto.class))
+                    }),
+            @APIResponse(responseCode = "401", description = "Unauthorized request"),
+            @APIResponse(responseCode = "404", description = "Resources not found"),})
+    public Response getSavingAccountDetailBasedOnCustomerId( Long customerId
+
+    ) {
+        return Response.status(HttpResponseStatus.OK.code()).entity(services.getSavingAccountDetailBasedOnCustomerId(customerId)).build();
     }
 
 }

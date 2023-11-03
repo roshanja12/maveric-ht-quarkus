@@ -132,6 +132,33 @@ class SavingAccountServiceTest {
         resource.updateAccountsDetails(updateAccountsRequestDto);
     }
 
+    @Test
+    void get_all_saving_account_details_based_on_account_id(){
+
+        Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
+        resource.getSavingAccountDetailBasedOnAccountId(updateAccountsRequestDto.getSavingAccountId());
+    }
+
+    @Test
+    void get_all_saving_account_details_based_on_customer_id(){
+        Mockito.when(repository.findByCustomerId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
+        resource.getSavingAccountDetailBasedOnCustomerId(updateAccountsRequestDto.getSavingAccountId());
+    }
+
+
+    @Test
+    void get_all_saving_account_details_based_on_account_id_no_data_found(){
+        Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
+        resource.getSavingAccountDetailBasedOnAccountId(updateAccountsRequestDto.getSavingAccountId());
+    }
+
+    @Test
+    void get_all_saving_account_details_based_on_customer_id_no_data_found(){
+
+        Mockito.when(repository.findByCustomerId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
+        resource.getSavingAccountDetailBasedOnCustomerId(updateAccountsRequestDto.getSavingAccountId());
+    }
+
 }
 
 

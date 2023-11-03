@@ -10,4 +10,8 @@ public class SavingAccountRepository implements PanacheRepository<SavingAccount>
     public SavingAccount findBySavingsAccountId(Long savingsAccountId){
         return find("savingsAccountId", savingsAccountId).firstResult();
     }
+
+    public SavingAccount findByCustomerId(Long customerId){
+        return find("customerId", customerId).firstResult();
+    }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static jakarta.xml.bind.DatatypeConverter.parseInt;
+import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_URL_PATH;
 import static org.maveric.quarkus.panache.common.SavingAccountConstant.*;
 import static org.maveric.quarkus.panache.common.UtilsMethods.*;
 
@@ -114,6 +115,51 @@ public class SavingAccountServices {
     }
 
 
+    public ResponseDto getSavingAccountDetailBasedOnAccountId(Long accountId)
+    {
+
+        log.info("Request  ::  accountId {}", accountId);
+        ResponseDto responseDto = null;
+        try {
+            SavingAccount savingAccount = savingAccountRepository.findBySavingsAccountId(accountId);
+
+            if (savingAccount == null) {
+                log.error("Saving account detail not present in db");
+                throw new SavingDetailsNotFoundException("Saving account details not found for this id " + accountId);
+            }
+
+            responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
+                    UPDATED_SUCCESS_RESPONSE_MSG, savingAccount, SAVING_ACCOUNTS_URL_PATH);
+            log.info("Response :: {} ", responseDto);
+        } catch (Exception e) {
+            log.error("error :: " + e.getMessage());
+            throw e;
+        }
+        return responseDto;
+    }
+
+    public ResponseDto getSavingAccountDetailBasedOnCustomerId(Long customerId)
+    {
+
+        log.info("Request  ::  customerId {}", customerId);
+        ResponseDto responseDto = null;
+        try {
+            SavingAccount savingAccount = savingAccountRepository.findByCustomerId(customerId);
+
+            if (savingAccount == null) {
+                log.error("Saving account detail not present in db");
+                throw new SavingDetailsNotFoundException("Saving account details not found for this customerId " + customerId);
+            }
+
+            responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
+                    UPDATED_SUCCESS_RESPONSE_MSG, savingAccount, SAVING_ACCOUNTS_URL_PATH);
+            log.info("Response :: {} ", responseDto);
+        } catch (Exception e) {
+            log.error("error :: " + e.getMessage());
+            throw e;
+        }
+        return responseDto;
+    }
 
 
 }
