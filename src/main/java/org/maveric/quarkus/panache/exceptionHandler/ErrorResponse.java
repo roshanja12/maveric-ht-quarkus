@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
@@ -13,6 +14,7 @@ import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_AC
 
 @Getter
 @EqualsAndHashCode
+@Setter
 public class ErrorResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

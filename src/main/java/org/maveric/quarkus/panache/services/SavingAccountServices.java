@@ -4,14 +4,32 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.maveric.quarkus.panache.dtos.ResponseDto;
+import org.maveric.quarkus.panache.dtos.SavingAccountRequestDto;
+import org.maveric.quarkus.panache.dtos.SavingAccountResponseDto;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
+import org.maveric.quarkus.panache.enums.SavingAccountStatus;
+import org.maveric.quarkus.panache.exceptionHandler.CustomerProxyException;
 import org.maveric.quarkus.panache.exceptionHandler.SavingDetailsNotFoundException;
+import org.maveric.quarkus.panache.exceptionHandler.SavingsAccountCreationException;
+import org.maveric.quarkus.panache.exceptionHandler.UnsupportedFileTypeException;
 import org.maveric.quarkus.panache.model.SavingAccount;
+import org.maveric.quarkus.panache.proxy.CustomerProxy;
 import org.maveric.quarkus.panache.repository.SavingAccountRepository;
+import org.modelmapper.ModelMapper;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +43,9 @@ import static org.maveric.quarkus.panache.common.UtilsMethods.*;
 @Slf4j
 @ApplicationScoped
 public class SavingAccountServices {
+    @RestClient
+    @Inject
+    private CustomerProxy proxy;
 
     public static final String QUERY_NUMERIC = " WHERE  customerId = ?1 OR customerPhone = ?1  ORDER BY savingsAccountId DESC ";
 
@@ -76,13 +97,12 @@ public class SavingAccountServices {
             String query = null;
             PanacheQuery<SavingAccount> queryResult = null;
             Integer page = pageNumber;
-            Integer index= getPageIndexValue(page,size);
+            Integer index = getPageIndexValue(page, size);
             log.info(search);
-            if (search==null) {
-                query =NON_SEARCH_QUERY ;
+            if (search == null) {
+                query = NON_SEARCH_QUERY;
                 queryResult = savingAccountRepository.find(query);
-            }
-           else if (isNumeric(search)) {
+            } else if (isNumeric(search)) {
                 query = QUERY_NUMERIC;
                 queryResult = savingAccountRepository.find(query, parseInt(search));
             } else {
@@ -113,7 +133,92 @@ public class SavingAccountServices {
         return responseDto;
     }
 
+    public SavingAccountResponseDto createAccount(FileUpload file, SavingAccountRequestDto savingAccountRequestDto) throws SQLException, IOException, CustomerProxyException {
+        System.out.println("****inside create account mock account="+new SavingAccount());
 
+        SavingAccount savingAccount = createAccountObject(file, savingAccountRequestDto);
 
+        SavingAccountResponseDto responseDto = null;
+        try {
+            savingAccountRepository.persist(savingAccount);
+            ModelMapper modelMapper = new ModelMapper();
+            responseDto = modelMapper.map(savingAccount, SavingAccountResponseDto.class);
+            log.info("Saving account created successfully.");
+            return responseDto;
+        } catch (Exception e) {
+            log.error("Error creating saving account: " + e.getMessage());
+            throw e;
+        }
+
+    }
+
+    private SavingAccount createAccountObject(FileUpload file, SavingAccountRequestDto savingAccountRequestDto) throws IOException, SQLException, CustomerProxyException {
+        SavingAccount savingAccount = null;
+        validateCustomerProxy(savingAccountRequestDto.getCustomerId());
+        validateFile(file);
+        log.info("Attempting to create an SavingAccount object");
+        try {
+            ModelMapper modelMapper = new ModelMapper();
+            savingAccount = modelMapper.map(savingAccountRequestDto, SavingAccount.class);
+            savingAccount.setStatus(SavingAccountStatus.ACTIVE);
+            savingAccount.setCreatedDate(Instant.now());
+            savingAccount.setUpdatedDate(Instant.now());
+            savingAccount.setDocument(createDocumentBlob(file));
+            savingAccount.setDocumentName(file.fileName());
+            System.out.println("saving account"+savingAccount);
+            if (!savingAccountRequestDto.getIsAllowOverDraft() && savingAccountRequestDto.getOverDraftLimit() != null) {
+                log.error("Attempted to set overdraft limit when not allowed.");
+                throw new SavingsAccountCreationException("Not able to add OverDraftLimit");
+            }
+        } catch (Exception e) {
+            log.error("Error creating an Account Object: " + e.getMessage());
+            throw e;
+        }
+        return savingAccount;
+    }
+
+    private Blob createDocumentBlob(FileUpload file) throws SQLException, IOException {
+        try {
+            log.info("Attempting to create document blob");
+            Path filePath = file.filePath();
+            byte[] fileBytes = Files.readAllBytes(filePath);
+            return new SerialBlob(fileBytes);
+        } catch (Exception e) {
+            log.error("Error creating document blob: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    private void validateFile(FileUpload file) throws IOException {
+        try {
+            log.info("Validating the uploaded File");
+            if (file == null || file.fileName().equalsIgnoreCase("")) {
+                log.error("File is null or empty");
+                throw new UnsupportedFileTypeException("File cannot be null");
+            }
+            if (!file.fileName().toLowerCase().endsWith(".jpeg") && !file.fileName().toLowerCase().endsWith(".jpg")) {
+                log.error("Unsupported file type");
+                throw new UnsupportedFileTypeException("File Type Not Supported");
+            }
+            if (Files.size(file.filePath()) > 1024 * 1024) {
+                log.error("File size exceeds maximum limit");
+                throw new UnsupportedFileTypeException("File Size Exceeds Maximum Limit");
+            }
+        } catch (Exception e) {
+            log.error("Error validating file: " + e.getMessage());
+            throw e;
+        }
+
+    }
+
+    private void validateCustomerProxy(Long customerId) throws CustomerProxyException {
+        try {
+            log.info("Validating the Customer by connecting to Customer Service");
+            Response response = proxy.getCustomerByCustomerId(customerId);
+        } catch (Exception e) {
+            log.error("Validating the Customer failed");
+            throw new CustomerProxyException("customer not found for id=" + customerId, e);
+        }
+    }
 
 }

@@ -1,14 +1,15 @@
 package org.maveric.quarkus.panache.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
 
 @Data
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseDto {
     private String status;
     private String message;
