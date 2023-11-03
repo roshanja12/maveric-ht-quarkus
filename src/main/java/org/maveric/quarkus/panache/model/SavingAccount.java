@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.maveric.quarkus.panache.enums.InterestCompoundPeriod;
+import org.maveric.quarkus.panache.enums.SavingAccountStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;

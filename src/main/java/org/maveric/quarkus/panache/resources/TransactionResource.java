@@ -39,7 +39,7 @@ public class TransactionResource {
     public Response withdraw(@RequestBody TransactionRequestDto requestDto){
         ResponseDto responseDto = new ResponseDto();
         responseDto.setStatus("Success");
-        responseDto.setCode(201L);
+        // responseDto.setCode(200L)
         responseDto.setMessage("Debited Successfully");
         responseDto.setError(null);
         responseDto.setPath("api/v1/saving-account/withdraws");
@@ -63,7 +63,7 @@ public class TransactionResource {
     public Response deposit(@RequestBody TransactionRequestDto requestDto){
         ResponseDto responseDto = new ResponseDto();
         responseDto.setStatus("Success");
-        responseDto.setCode(201L);
+        // responseDto.setCode(200L)
         responseDto.setMessage("Debited Successfully");
         responseDto.setError(null);
         responseDto.setPath("/api/v1/saving-account/deposits");
@@ -88,7 +88,7 @@ public class TransactionResource {
     public Response getTransactionHistoriesByCustomerId(@PathParam("savingAccountId") Long savingAccountId) {
         ResponseDto responseDto = new ResponseDto();
         responseDto.setStatus("Success");
-        responseDto.setCode(201L);
+        // responseDto.setCode(200L)
         responseDto.setMessage("Successfully");
         responseDto.setError(null);
         responseDto.setPath("/api/v1/saving-account/{savingAccountId}/transactions");
