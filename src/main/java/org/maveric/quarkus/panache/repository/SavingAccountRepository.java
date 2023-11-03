@@ -6,4 +6,8 @@ import org.maveric.quarkus.panache.model.SavingAccount;
 
 @ApplicationScoped
 public class SavingAccountRepository implements PanacheRepository<SavingAccount> {
+
+    public SavingAccount findBySavingsAccountId(Long savingsAccountId){
+        return find("savingsAccountId", savingsAccountId).firstResult();
+    }
 }

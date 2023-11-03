@@ -1,6 +1,8 @@
 package org.maveric.quarkus.panache.resources;
 
 
+import io.netty.handler.codec.http.HttpResponseStatus;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -13,7 +15,11 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.maveric.quarkus.panache.dtos.ResponseDto;
 import org.maveric.quarkus.panache.dtos.TransactionRequestDto;
+import org.maveric.quarkus.panache.dtos.TransactionResponseDto;
 import org.maveric.quarkus.panache.model.Transaction;
+import org.maveric.quarkus.panache.service.ITransactionService;
+
+import java.util.List;
 
 
 @Path("/api/v1/accounts/saving")
@@ -21,6 +27,9 @@ import org.maveric.quarkus.panache.model.Transaction;
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Saving Account Transaction End Points")
 public class TransactionResource {
+
+    @Inject
+    private ITransactionService iTransactionService;
 
 
     @PUT
@@ -73,28 +82,19 @@ public class TransactionResource {
     }
 
     @GET
-    @Path("/{savingAccountId}/transactions")
+    @Path("/{savingsAccountId}/transactions")
     @Operation(summary = "This Api fetch  transactions history of customer account")
     @APIResponses({  @APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
             @APIResponse(responseCode = "500", description = "Internal Server Error: An unexpected error occurred"),
-            @APIResponse(responseCode = "200", description = "Account Created Successfully",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ResponseDto.class))
-                    }),
+            @APIResponse(responseCode = "200", description = "Account Created Successfully"),
             @APIResponse(responseCode = "401", description = "Unauthorized request"),
             @APIResponse(responseCode = "404", description = "Resources not found"),})
-    public Response getTransactionHistoriesByCustomerId(@PathParam("savingAccountId") Long savingAccountId) {
-        ResponseDto responseDto = new ResponseDto();
-        responseDto.setStatus("Success");
-        responseDto.setCode(201L);
-        responseDto.setMessage("Successfully");
-        responseDto.setError(null);
-        responseDto.setPath("/api/v1/saving-account/{savingAccountId}/transactions");
-        Transaction transaction = new Transaction();
-        responseDto.setData(transaction);
-        return Response.status(200).entity(responseDto).build();
+    public Response getTransactionHistories(@PathParam("savingsAccountId") Long savingsAccountId,
+                                                        @QueryParam("pageNumber") int pageNumber,
+                                                        @QueryParam("pageSize") int pageSize) {
+
+       List<TransactionResponseDto> transactionResponseDto=iTransactionService.getTransactions(savingsAccountId,pageNumber,pageSize);
+        return Response.status(HttpResponseStatus.OK.code()).entity(transactionResponseDto).build();
     }
 }
 
