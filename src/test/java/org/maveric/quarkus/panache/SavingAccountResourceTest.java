@@ -11,7 +11,7 @@ import org.maveric.quarkus.panache.enums.SavingAccountStatus;
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
-import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_ACCOUNTS_URL_PATH;
+import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_URL_PATH;
 
 @QuarkusTest
  public class SavingAccountResourceTest {
@@ -47,6 +47,33 @@ import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_AC
                 .get(SAVING_ACCOUNTS_URL_PATH)
                 .then()
                 .statusCode(400);
+    }
+
+
+    @Test
+    public void testGetAccountDetailsBasedOnAccountId() {
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("accountId", "1")
+                .when()
+                .get(SAVING_ACCOUNTS_URL_PATH+"/")
+                .then()
+                .statusCode(200);
+
+    }
+
+    @Test
+    public void testGetAccountDetailsBasedOnCustomerId() {
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("customerId", 1)
+                .when()
+                .get(SAVING_ACCOUNTS_URL_PATH)
+                .then()
+                .statusCode(200);
+
     }
 
 }

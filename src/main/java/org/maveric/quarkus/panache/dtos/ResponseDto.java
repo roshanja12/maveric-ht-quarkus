@@ -1,6 +1,5 @@
 package org.maveric.quarkus.panache.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
@@ -15,6 +14,6 @@ public class ResponseDto {
     private Integer code;
     private List<String> error;
     private String path;
-    private Instant timeStamp;
+    private Instant timeStamp = Instant.now();
     private Object data;
 }
