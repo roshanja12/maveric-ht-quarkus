@@ -129,7 +129,12 @@ public class SavingsAccountServices {
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
                     UPDATED_SUCCESS_RESPONSE_MSG, savingAccount, SAVING_ACCOUNTS_URL_PATH);
             log.info("Response :: {} ", responseDto);
-        } catch (Exception e) {
+        }
+        catch (SavingsAccountDetailsNotFoundException e) {
+            log.error("error :: " + e.getMessage());
+            throw e;
+        }
+        catch (Exception e) {
             log.error("error :: " + e.getMessage());
             throw e;
         }
