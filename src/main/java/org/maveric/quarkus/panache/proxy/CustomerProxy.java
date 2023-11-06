@@ -10,9 +10,9 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @RegisterRestClient(configKey = "customer.proxy")
 public interface CustomerProxy {
-    @GET
-    @Path("/api/v1/customers/searchByCustomerId")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response getCustomerByCustomerId(@QueryParam("customerId") Long customerId);
+  @GET
+  @Path("/api/v1/customers/searchByCustomerId")
+  @Produces(MediaType.APPLICATION_JSON)
+  Response getCustomerByCustomerId(@QueryParam("customerId") Long customerId);
 
 }

@@ -5,10 +5,9 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class UnsupportedFileTypeExceptionMapper implements ExceptionMapper<UnsupportedFileTypeException> {
-
-    @Override
-    public Response toResponse(UnsupportedFileTypeException e) {
+public class SavingsAccountExceptionMapper implements ExceptionMapper<SavingsAccountException> {
+  @Override
+  public Response toResponse(SavingsAccountException e) {
     ErrorResponse.ErrorMessage errorMessages =
       new ErrorResponse.ErrorMessage(e.getMessage());
     ErrorResponse response = new ErrorResponse(errorMessages);
@@ -16,4 +15,4 @@ public class UnsupportedFileTypeExceptionMapper implements ExceptionMapper<Unsup
 
     return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
   }
-  }
+}
