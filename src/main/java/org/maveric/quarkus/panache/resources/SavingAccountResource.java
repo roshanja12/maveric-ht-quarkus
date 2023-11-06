@@ -1,7 +1,6 @@
 package org.maveric.quarkus.panache.resources;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
-import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -26,6 +25,7 @@ import org.maveric.quarkus.panache.services.SavingAccountServices;
 public class SavingAccountResource {
 
     SavingAccountServices services;
+
     public SavingAccountResource(SavingAccountServices services) {
         this.services = services;
     }
@@ -112,7 +112,7 @@ public class SavingAccountResource {
                     }),
             @APIResponse(responseCode = "401", description = "Unauthorized request"),
             @APIResponse(responseCode = "404", description = "Resources not found"),})
-    public Response getSavingAccountDetailBasedOnAccountId(Long accountId
+    public Response getSavingAccountDetailBasedOnAccountId(@PathParam("accountId") Long accountId
 
     ) {
         return Response.status(HttpResponseStatus.OK.code()).entity(services.getSavingAccountDetailBasedOnAccountId(accountId)).build();
@@ -131,7 +131,7 @@ public class SavingAccountResource {
                     }),
             @APIResponse(responseCode = "401", description = "Unauthorized request"),
             @APIResponse(responseCode = "404", description = "Resources not found"),})
-    public Response getSavingAccountDetailBasedOnCustomerId( Long customerId
+    public Response getSavingAccountDetailBasedOnCustomerId(@PathParam("customerId") Long customerId
 
     ) {
         return Response.status(HttpResponseStatus.OK.code()).entity(services.getSavingAccountDetailBasedOnCustomerId(customerId)).build();

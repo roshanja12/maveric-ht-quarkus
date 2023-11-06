@@ -41,12 +41,12 @@ import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_UR
     @Test
      void test_get_account_details() {
         given()
-                .param("page", 0)
+                .param("page", 1)
                 .param("size", 1)
                 .when()
                 .get(SAVING_ACCOUNTS_URL_PATH)
                 .then()
-                .statusCode(400);
+                .statusCode(200);
     }
 
 
@@ -57,7 +57,7 @@ import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_UR
                 .contentType(ContentType.JSON)
                 .pathParam("accountId", "1")
                 .when()
-                .get(SAVING_ACCOUNTS_URL_PATH+"/")
+                .get(SAVING_ACCOUNTS_URL_PATH+"/{accountId}")
                 .then()
                 .statusCode(200);
 
@@ -70,7 +70,7 @@ import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_UR
                 .contentType(ContentType.JSON)
                 .pathParam("customerId", 1)
                 .when()
-                .get(SAVING_ACCOUNTS_URL_PATH)
+                .get(SAVING_ACCOUNTS_URL_PATH+"/{customerId}")
                 .then()
                 .statusCode(200);
 

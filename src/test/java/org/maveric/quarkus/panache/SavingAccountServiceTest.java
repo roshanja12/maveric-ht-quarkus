@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
+import org.maveric.quarkus.panache.enums.SavingAccountStatus;
 import org.maveric.quarkus.panache.exceptionHandler.SavingDetailsNotFoundException;
 import org.maveric.quarkus.panache.model.SavingAccount;
-import org.maveric.quarkus.panache.enums.SavingAccountStatus;
 import org.maveric.quarkus.panache.repository.SavingAccountRepository;
 import org.maveric.quarkus.panache.services.SavingAccountServices;
 import org.mockito.ArgumentMatcher;
@@ -133,30 +133,29 @@ class SavingAccountServiceTest {
     }
 
     @Test
-    void get_all_saving_account_details_based_on_account_id(){
+    void get_all_saving_account_details_based_on_account_id() {
 
         Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
         resource.getSavingAccountDetailBasedOnAccountId(updateAccountsRequestDto.getSavingAccountId());
     }
 
     @Test
-    void get_all_saving_account_details_based_on_customer_id(){
+    void get_all_saving_account_details_based_on_customer_id() {
         Mockito.when(repository.findByCustomerId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
         resource.getSavingAccountDetailBasedOnCustomerId(updateAccountsRequestDto.getSavingAccountId());
     }
 
 
     @Test
-    void get_all_saving_account_details_based_on_account_id_no_data_found(){
+    void get_all_saving_account_details_based_on_account_id_no_data_found() {
         Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
-        resource.getSavingAccountDetailBasedOnAccountId(updateAccountsRequestDto.getSavingAccountId());
+        Assertions.assertThrows(RuntimeException.class, () -> resource.getSavingAccountDetailBasedOnAccountId(updateAccountsRequestDto.getSavingAccountId()));
     }
 
     @Test
-    void get_all_saving_account_details_based_on_customer_id_no_data_found(){
-
+    void get_all_saving_account_details_based_on_customer_id_no_data_found() {
         Mockito.when(repository.findByCustomerId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
-        resource.getSavingAccountDetailBasedOnCustomerId(updateAccountsRequestDto.getSavingAccountId());
+        Assertions.assertThrows(RuntimeException.class, () -> resource.getSavingAccountDetailBasedOnCustomerId(updateAccountsRequestDto.getSavingAccountId()));
     }
 
 }
