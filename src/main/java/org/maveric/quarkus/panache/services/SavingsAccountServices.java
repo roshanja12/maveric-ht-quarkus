@@ -8,9 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.maveric.quarkus.panache.dtos.ResponseDto;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
-import org.maveric.quarkus.panache.exceptionHandler.SavingDetailsNotFoundException;
-import org.maveric.quarkus.panache.model.SavingAccount;
-import org.maveric.quarkus.panache.repository.SavingAccountRepository;
+import org.maveric.quarkus.panache.exceptionHandler.SavingsAccountDetailsNotFoundException;
+import org.maveric.quarkus.panache.model.SavingsAccount;
+import org.maveric.quarkus.panache.repository.SavingsAccountRepository;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -19,22 +19,22 @@ import java.util.Map;
 
 import static jakarta.xml.bind.DatatypeConverter.parseInt;
 import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_URL_PATH;
-import static org.maveric.quarkus.panache.common.SavingAccountConstant.*;
+import static org.maveric.quarkus.panache.common.SavingsAccountConstant.*;
 import static org.maveric.quarkus.panache.common.UtilsMethods.*;
 
 /* @author meleto sofiya */
 @Slf4j
 @ApplicationScoped
-public class SavingAccountServices {
+public class SavingsAccountServices {
 
     public static final String QUERY_NUMERIC = " WHERE  customerId = ?1 OR customerPhone = ?1  ORDER BY savingsAccountId DESC ";
 
     public static final String QUERY_NOT_NUMERIC = " WHERE customerName = ?1 OR customerEmail = ?1  ORDER BY savingsAccountId DESC ";
 
     public static final String NON_SEARCH_QUERY = " ORDER BY savingsAccountId DESC ";
-    SavingAccountRepository savingAccountRepository;
+    SavingsAccountRepository savingAccountRepository;
 
-    public SavingAccountServices(SavingAccountRepository savingAccountRepository) {
+    public SavingsAccountServices(SavingsAccountRepository savingAccountRepository) {
         this.savingAccountRepository = savingAccountRepository;
     }
 
@@ -43,11 +43,11 @@ public class SavingAccountServices {
         log.info("Request  ::  {}", updateAccountsRequestDto);
         ResponseDto responseDto = null;
         try {
-            SavingAccount savingAccount = savingAccountRepository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId());
+            SavingsAccount savingAccount = savingAccountRepository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId());
 
             if (savingAccount == null) {
                 log.error("Saving account detail not present in db");
-                throw new SavingDetailsNotFoundException("Saving account details not found for this id " + updateAccountsRequestDto.getSavingAccountId());
+                throw new SavingsAccountDetailsNotFoundException("Saving account details not found for this id " + updateAccountsRequestDto.getSavingAccountId());
             }
 
             if (updateAccountsRequestDto.getIsAllowOverDraft() == null) {
@@ -75,15 +75,14 @@ public class SavingAccountServices {
         ResponseDto responseDto = null;
         try {
             String query = null;
-            PanacheQuery<SavingAccount> queryResult = null;
+            PanacheQuery<SavingsAccount> queryResult = null;
             Integer page = pageNumber;
-            Integer index= getPageIndexValue(page,size);
+            Integer index = getPageIndexValue(page, size);
             log.info(search);
-            if (search==null) {
-                query =NON_SEARCH_QUERY ;
+            if (search == null) {
+                query = NON_SEARCH_QUERY;
                 queryResult = savingAccountRepository.find(query);
-            }
-           else if (isNumeric(search)) {
+            } else if (isNumeric(search)) {
                 query = QUERY_NUMERIC;
                 queryResult = savingAccountRepository.find(query, parseInt(search));
             } else {
@@ -91,10 +90,10 @@ public class SavingAccountServices {
                 queryResult = savingAccountRepository.find(query, search);
             }
 
-            List<SavingAccount> savingAccountList = queryResult.page(Page.of(index, size)).list();
+            List<SavingsAccount> savingAccountList = queryResult.page(Page.of(index, size)).list();
             if (savingAccountList.isEmpty()) {
                 log.error("Saving account details not present in db");
-                throw new SavingDetailsNotFoundException("Saving accounts details not found");
+                throw new SavingsAccountDetailsNotFoundException("Saving accounts details not found");
             }
 
             Map<String, Object> responseData = new HashMap<>();
@@ -115,17 +114,16 @@ public class SavingAccountServices {
     }
 
 
-    public ResponseDto getSavingAccountDetailBasedOnAccountId(Long accountId)
-    {
+    public ResponseDto getSavingAccountDetailBasedOnAccountId(Long accountId) {
 
         log.info("Request  ::  accountId {}", accountId);
         ResponseDto responseDto = null;
         try {
-            SavingAccount savingAccount = savingAccountRepository.findBySavingsAccountId(accountId);
+            SavingsAccount savingAccount = savingAccountRepository.findBySavingsAccountId(accountId);
 
             if (savingAccount == null) {
                 log.error("Saving account detail not present in db");
-                throw new SavingDetailsNotFoundException("Saving account details not found for this id " + accountId);
+                throw new SavingsAccountDetailsNotFoundException("Saving account details not found for this id " + accountId);
             }
 
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
@@ -138,17 +136,16 @@ public class SavingAccountServices {
         return responseDto;
     }
 
-    public ResponseDto getSavingAccountDetailBasedOnCustomerId(Long customerId)
-    {
+    public ResponseDto getSavingAccountDetailBasedOnCustomerId(Long customerId) {
 
         log.info("Request  ::  customerId {}", customerId);
         ResponseDto responseDto = null;
         try {
-            SavingAccount savingAccount = savingAccountRepository.findByCustomerId(customerId);
+            SavingsAccount savingAccount = savingAccountRepository.findByCustomerId(customerId);
 
             if (savingAccount == null) {
                 log.error("Saving account detail not present in db");
-                throw new SavingDetailsNotFoundException("Saving account details not found for this customerId " + customerId);
+                throw new SavingsAccountDetailsNotFoundException("Saving account details not found for this customerId " + customerId);
             }
 
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),

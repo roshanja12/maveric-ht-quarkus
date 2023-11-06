@@ -4,9 +4,8 @@ import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.maveric.quarkus.panache.enums.SavingAccountStatus;
+import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
 
 import java.math.BigDecimal;
 
@@ -21,6 +20,6 @@ public class UpdateAccountsRequestDto {
     private Long savingAccountId;
     private Boolean isAllowOverDraft;
     private BigDecimal overDraftLimit;
-    private SavingAccountStatus status;
+    private SavingsAccountStatus status;
 
 }

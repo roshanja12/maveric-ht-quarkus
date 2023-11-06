@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.maveric.quarkus.panache.enums.InterestCompoundPeriod;
-import org.maveric.quarkus.panache.enums.SavingAccountStatus;
+import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class SavingAccount {
+public class SavingsAccount {
 
     @Id
     @GeneratedValue
@@ -41,7 +41,7 @@ public class SavingAccount {
     @Column(nullable = false)
     private Long balance;
     @Enumerated(EnumType.STRING)
-    private SavingAccountStatus status;
+    private SavingsAccountStatus status;
     @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaction> transactions;
 }

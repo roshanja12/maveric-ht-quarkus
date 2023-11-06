@@ -6,7 +6,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
-import org.maveric.quarkus.panache.enums.SavingAccountStatus;
+import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
 
 import java.math.BigDecimal;
 
@@ -14,7 +14,7 @@ import static io.restassured.RestAssured.given;
 import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_URL_PATH;
 
 @QuarkusTest
- public class SavingAccountResourceTest {
+ public class SavingsAccountResourceTest {
 
     private UpdateAccountsRequestDto updateAccountsRequestDto;
 
@@ -22,7 +22,7 @@ import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_UR
     void setUp() {
         updateAccountsRequestDto = new UpdateAccountsRequestDto();
         updateAccountsRequestDto.setSavingAccountId(1L);
-        updateAccountsRequestDto.setStatus(SavingAccountStatus.ACTIVE);
+        updateAccountsRequestDto.setStatus(SavingsAccountStatus.ACTIVE);
         updateAccountsRequestDto.setOverDraftLimit(BigDecimal.valueOf(0));
         updateAccountsRequestDto.setIsAllowOverDraft(null);
     }

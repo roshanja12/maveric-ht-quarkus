@@ -6,10 +6,10 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class SavingDetailsNotFoundExceptionMapper implements ExceptionMapper<SavingDetailsNotFoundException> {
+public class SavingsAccountDetailsNotFoundExceptionMapper implements ExceptionMapper<SavingsAccountDetailsNotFoundException> {
 
     @Override
-    public Response toResponse(SavingDetailsNotFoundException e) {
+    public Response toResponse(SavingsAccountDetailsNotFoundException e) {
         ErrorResponse.ErrorMessage errorMessages =
                 new ErrorResponse.ErrorMessage(e.getMessage());
 

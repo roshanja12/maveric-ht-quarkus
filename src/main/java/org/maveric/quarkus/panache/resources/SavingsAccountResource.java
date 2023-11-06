@@ -13,20 +13,20 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.maveric.quarkus.panache.dtos.ResponseDto;
-import org.maveric.quarkus.panache.dtos.SavingAccountRequestDto;
+import org.maveric.quarkus.panache.dtos.SavingsAccountRequestDto;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
-import org.maveric.quarkus.panache.services.SavingAccountServices;
+import org.maveric.quarkus.panache.services.SavingsAccountServices;
 
 /* @author meleto sofiya */
 @Path("/api/v1/accounts/saving")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Saving Account End Points")
-public class SavingAccountResource {
+public class SavingsAccountResource {
 
-    SavingAccountServices services;
+    SavingsAccountServices services;
 
-    public SavingAccountResource(SavingAccountServices services) {
+    public SavingsAccountResource(SavingsAccountServices services) {
         this.services = services;
     }
 
@@ -42,7 +42,7 @@ public class SavingAccountResource {
                     }),
             @APIResponse(responseCode = "401", description = "Unauthorized request"),
             @APIResponse(responseCode = "404", description = "Resources not found"),})
-    public Response createAccount(@RequestBody SavingAccountRequestDto savingBankDto) {
+    public Response createAccount(@RequestBody SavingsAccountRequestDto savingBankDto) {
 
 
         ResponseDto responseDto = new ResponseDto();

@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description="Saving account request dto")
-public class SavingAccountRequestDto {
+public class SavingsAccountRequestDto {
     @Schema(required = true)
     private Long customerId;
     @Schema(required = true)
