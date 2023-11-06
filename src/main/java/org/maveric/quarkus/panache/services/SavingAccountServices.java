@@ -134,7 +134,6 @@ public class SavingAccountServices {
     }
 
     public SavingAccountResponseDto createAccount(FileUpload file, SavingAccountRequestDto savingAccountRequestDto) throws SQLException, IOException, CustomerProxyException {
-        System.out.println("****inside create account mock account="+new SavingAccount());
 
         SavingAccount savingAccount = createAccountObject(file, savingAccountRequestDto);
 
@@ -165,7 +164,6 @@ public class SavingAccountServices {
             savingAccount.setUpdatedDate(Instant.now());
             savingAccount.setDocument(createDocumentBlob(file));
             savingAccount.setDocumentName(file.fileName());
-            System.out.println("saving account"+savingAccount);
             if (!savingAccountRequestDto.getIsAllowOverDraft() && savingAccountRequestDto.getOverDraftLimit() != null) {
                 log.error("Attempted to set overdraft limit when not allowed.");
                 throw new SavingsAccountCreationException("Not able to add OverDraftLimit");
