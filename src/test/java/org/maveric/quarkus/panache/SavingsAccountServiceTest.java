@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
-import org.maveric.quarkus.panache.exceptionHandler.SavingDetailsNotFoundException;
-import org.maveric.quarkus.panache.model.SavingAccount;
-import org.maveric.quarkus.panache.enums.SavingAccountStatus;
-import org.maveric.quarkus.panache.repository.SavingAccountRepository;
-import org.maveric.quarkus.panache.services.SavingAccountServices;
+import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
+import org.maveric.quarkus.panache.exceptionHandler.SavingsAccountDetailsNotFoundException;
+import org.maveric.quarkus.panache.model.SavingsAccount;
+import org.maveric.quarkus.panache.repository.SavingsAccountRepository;
+import org.maveric.quarkus.panache.services.SavingsAccountServices;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
@@ -23,30 +23,30 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @QuarkusTest
-class SavingAccountServiceTest {
+class SavingsAccountServiceTest {
 
     @InjectMock
-    SavingAccountRepository repository;
+    SavingsAccountRepository repository;
 
     @Inject
-    SavingAccountServices resource;
+    SavingsAccountServices resource;
 
-    private SavingAccount savingAccount;
+    private SavingsAccount savingAccount;
 
     private UpdateAccountsRequestDto updateAccountsRequestDto;
 
 
     @BeforeEach
     void setUp() {
-        savingAccount = new SavingAccount();
+        savingAccount = new SavingsAccount();
         savingAccount.setSavingsAccountId(1L);
         savingAccount.setIsAllowOverDraft(true);
         savingAccount.setOverDraftLimit(BigDecimal.valueOf(10));
-        savingAccount.setStatus(SavingAccountStatus.ACTIVE);
+        savingAccount.setStatus(SavingsAccountStatus.ACTIVE);
 
         updateAccountsRequestDto = new UpdateAccountsRequestDto();
         updateAccountsRequestDto.setSavingAccountId(1L);
-        updateAccountsRequestDto.setStatus(SavingAccountStatus.ACTIVE);
+        updateAccountsRequestDto.setStatus(SavingsAccountStatus.ACTIVE);
         updateAccountsRequestDto.setOverDraftLimit(BigDecimal.valueOf(0));
         updateAccountsRequestDto.setIsAllowOverDraft(null);
 
@@ -55,11 +55,11 @@ class SavingAccountServiceTest {
     @Test
     void get_account_detail_if_data_is_contact_id_result_data_found() {
 
-        String query1 = SavingAccountServices.QUERY_NUMERIC;
-        String query2 = SavingAccountServices.QUERY_NOT_NUMERIC;
+        String query1 = SavingsAccountServices.QUERY_NUMERIC;
+        String query2 = SavingsAccountServices.QUERY_NOT_NUMERIC;
         System.out.println("****inside test repo=" + repository);
 
-        PanacheQuery<SavingAccount> query = Mockito.mock(PanacheQuery.class);
+        PanacheQuery<SavingsAccount> query = Mockito.mock(PanacheQuery.class);
         Mockito.when(repository.find(query1, 1)).thenReturn(query);
         Mockito.when(repository.find(query2.trim())).thenReturn(query);
         Page page = Page.of(0, 1);
@@ -76,11 +76,11 @@ class SavingAccountServiceTest {
     @Test
     void get_account_detail_if_data_is_contact_name_result_data_found() {
 
-        String query1 = SavingAccountServices.QUERY_NUMERIC;
-        String query2 = SavingAccountServices.QUERY_NOT_NUMERIC;
+        String query1 = SavingsAccountServices.QUERY_NUMERIC;
+        String query2 = SavingsAccountServices.QUERY_NOT_NUMERIC;
         System.out.println("****inside test repo=" + repository);
 
-        PanacheQuery<SavingAccount> query = Mockito.mock(PanacheQuery.class);
+        PanacheQuery<SavingsAccount> query = Mockito.mock(PanacheQuery.class);
         Mockito.when(repository.find(query1, "abc")).thenReturn(query);
         Mockito.when(repository.find(query2, "abc")).thenReturn(query);
         Mockito.when(query.page(Mockito.any(Page.class))).thenReturn(query);
@@ -93,11 +93,11 @@ class SavingAccountServiceTest {
 
     @Test
     public void get_account_detail_if_data_is_contact_name_result_data_not_found() {
-        String query1 = SavingAccountServices.QUERY_NUMERIC;
-        String query2 = SavingAccountServices.QUERY_NOT_NUMERIC;
+        String query1 = SavingsAccountServices.QUERY_NUMERIC;
+        String query2 = SavingsAccountServices.QUERY_NOT_NUMERIC;
         System.out.println("****inside test repo=" + repository);
 
-        PanacheQuery<SavingAccount> query = Mockito.mock(PanacheQuery.class);
+        PanacheQuery<SavingsAccount> query = Mockito.mock(PanacheQuery.class);
         Mockito.when(repository.find(query1, 1)).thenReturn(query);
         Mockito.when(repository.find(query2.trim())).thenReturn(query);
         Page page = Page.of(2, 1);
@@ -105,10 +105,10 @@ class SavingAccountServiceTest {
         List list = Mockito.mock(List.class);
         Mockito.when(list.size()).thenReturn(0);
         Mockito.when(query.list()).thenReturn(list);
-        SavingAccountServices services = Mockito.mock(SavingAccountServices.class);
-        Mockito.when(services.getSavingAccount(1, 1, null)).thenThrow(new SavingDetailsNotFoundException("Saving accounts details not found"));
+        SavingsAccountServices services = Mockito.mock(SavingsAccountServices.class);
+        Mockito.when(services.getSavingAccount(1, 1, null)).thenThrow(new SavingsAccountDetailsNotFoundException("Saving accounts details not found"));
         // resource.getSavingAccount(1, 1, null);
-        assertThrows(SavingDetailsNotFoundException.class, () -> {
+        assertThrows(SavingsAccountDetailsNotFoundException.class, () -> {
             services.getSavingAccount(1, 1, null);
         });
     }
@@ -130,6 +130,32 @@ class SavingAccountServiceTest {
         Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
         updateAccountsRequestDto.setIsAllowOverDraft(null);
         resource.updateAccountsDetails(updateAccountsRequestDto);
+    }
+
+    @Test
+    void get_all_saving_account_details_based_on_account_id() {
+
+        Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
+        resource.getSavingAccountDetailBasedOnAccountId(updateAccountsRequestDto.getSavingAccountId());
+    }
+
+    @Test
+    void get_all_saving_account_details_based_on_customer_id() {
+        Mockito.when(repository.findByCustomerId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(savingAccount);
+        resource.getSavingAccountDetailBasedOnCustomerId(updateAccountsRequestDto.getSavingAccountId());
+    }
+
+
+    @Test
+    void get_all_saving_account_details_based_on_account_id_no_data_found() {
+        Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
+        Assertions.assertThrows(RuntimeException.class, () -> resource.getSavingAccountDetailBasedOnAccountId(updateAccountsRequestDto.getSavingAccountId()));
+    }
+
+    @Test
+    void get_all_saving_account_details_based_on_customer_id_no_data_found() {
+        Mockito.when(repository.findByCustomerId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
+        Assertions.assertThrows(RuntimeException.class, () -> resource.getSavingAccountDetailBasedOnCustomerId(updateAccountsRequestDto.getSavingAccountId()));
     }
 
 }

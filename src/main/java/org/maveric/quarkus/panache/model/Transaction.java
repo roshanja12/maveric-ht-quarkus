@@ -22,7 +22,7 @@ public class Transaction {
     private BigDecimal amount;
     private BigDecimal balance;
     private TransactionType type;
-    @JoinColumn(name = "saving_account_id")
+    @JoinColumn(name = "savings_account_id")
     @ManyToOne
-    private SavingAccount savingAccount;
+    private SavingsAccount savingAccount;
 }
