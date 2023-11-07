@@ -1,4 +1,4 @@
-package org.maveric.quarkus.panache.model;
+package org.maveric.quarkus.panache.enums;
 
 public enum TransactionType {
     WITHDRAW(1),DEPOSIT(2);

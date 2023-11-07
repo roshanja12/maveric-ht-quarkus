@@ -1,0 +1,288 @@
+---
+openapi: 3.0.3
+info:
+  title: Savings_Account_Api
+  description: Manage Saving Accounts and Transactions
+  contact:
+    name: '@mock'
+    url: https://mock
+  version: "1.0"
+externalDocs:
+  description: All save account api code mention below
+  url: https://mock
+tags:
+- name: Saving Account Api
+  description: Public API
+- name: Saving Account Api
+  description: Public API
+- name: Saving Account End Points
+- name: Saving Account Transaction End Points
+paths:
+  /api/v1/accounts/saving:
+    get:
+      tags:
+      - Saving Account End Points
+      summary: 'This Api to get all saving account details '
+      parameters:
+      - name: page
+        in: query
+        schema:
+          format: int32
+          type: integer
+      - name: search
+        in: query
+        schema:
+          type: string
+      - name: size
+        in: query
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "400":
+          description: "Bad Request: The request is invalid"
+        "500":
+          description: "Internal Server Error: An unexpected error occurred"
+        "200":
+          description: Account Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDto'
+        "401":
+          description: Unauthorized request
+        "404":
+          description: Resources not found
+    put:
+      tags:
+      - Saving Account End Points
+      summary: ' This Api for update draft details and status of accounts'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountsRequestDto'
+      responses:
+        "400":
+          description: "Bad Request: The request is invalid"
+        "401":
+          description: Unauthorized request
+        "404":
+          description: Api not found
+        "500":
+          description: "Internal Server Error: An unexpected error occurred"
+        "200":
+          description: Account Updated Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDto'
+    post:
+      tags:
+      - Saving Account End Points
+      summary: This Api creates saving account for customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavingAccountRequestDto'
+      responses:
+        "400":
+          description: "Bad Request: The request is invalid"
+        "500":
+          description: "Internal Server Error: An unexpected error occurred"
+        "201":
+          description: Account Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDto'
+        "401":
+          description: Unauthorized request
+        "404":
+          description: Resources not found
+  /api/v1/accounts/saving/deposits:
+    put:
+      tags:
+      - Saving Account Transaction End Points
+      summary: 'This Api perform credit operation of a customer '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequestDto'
+      responses:
+        "400":
+          description: "Bad Request: The request is invalid"
+        "500":
+          description: "Internal Server Error: An unexpected error occurred"
+        "200":
+          description: Account Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDto'
+        "401":
+          description: Unauthorized request
+        "404":
+          description: Resources not found
+  /api/v1/accounts/saving/withdraws:
+    put:
+      tags:
+      - Saving Account Transaction End Points
+      summary: 'This Api perform debit operation of a customer '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequestDto'
+      responses:
+        "400":
+          description: "Bad Request: The request is invalid"
+        "500":
+          description: "Internal Server Error: An unexpected error occurred"
+        "200":
+          description: Account Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDto'
+        "401":
+          description: Unauthorized request
+        "404":
+          description: Resources not found
+  /api/v1/accounts/saving/{savingAccountId}/transactions:
+    get:
+      tags:
+      - Saving Account Transaction End Points
+      summary: This Api fetch  transactions history of customer account
+      parameters:
+      - name: savingAccountId
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "400":
+          description: "Bad Request: The request is invalid"
+        "500":
+          description: "Internal Server Error: An unexpected error occurred"
+        "200":
+          description: Account Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDto'
+        "401":
+          description: Unauthorized request
+        "404":
+          description: Resources not found
+components:
+  schemas:
+    DraftDetailsRequestDto:
+      description: Draft Details request dto
+      required:
+      - allowOverDraft
+      - overDraftLimit
+      type: object
+      properties:
+        allowOverDraft:
+          type: boolean
+        overDraftLimit:
+          type: number
+    Instant:
+      format: date-time
+      type: string
+      example: 2022-03-10T16:15:50Z
+    InterestCompoundPeriod:
+      enum:
+      - MONTHLY
+      - QUARTERLY
+      - ANNUALLY
+      type: string
+    ResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        code:
+          format: int32
+          type: integer
+        error:
+          type: array
+          items:
+            type: string
+        path:
+          type: string
+        timeStamp:
+          $ref: '#/components/schemas/Instant'
+        data: {}
+    SavingAccountRequestDto:
+      description: Saving account request dto
+      required:
+      - customerId
+      - customerName
+      - phoneNumber
+      - minOpeningBalance
+      - interestCompoundPeriod
+      - isAllowOverDraft
+      type: object
+      properties:
+        customerId:
+          format: int64
+          type: integer
+        customerName:
+          type: string
+        phoneNumber:
+          type: string
+        minOpeningBalance:
+          type: number
+        interestCompoundPeriod:
+          $ref: '#/components/schemas/InterestCompoundPeriod'
+        isAllowOverDraft:
+          type: boolean
+        overDraftLimit:
+          type: number
+    SavingAccountStatus:
+      enum:
+      - APPLIED
+      - ACTIVE
+      - REJECTED
+      - BLOCKED
+      - UNBLOCKED
+      type: string
+    TransactionRequestDto:
+      description: 'It is the request to update the balance '
+      required:
+      - amount
+      - accountId
+      type: object
+      properties:
+        amount:
+          type: number
+        accountId:
+          format: int64
+          type: integer
+    UpdateAccountsRequestDto:
+      description: 'it is used to update status and draft details '
+      required:
+      - savingAccountId
+      type: object
+      properties:
+        savingAccountId:
+          format: int64
+          type: integer
+        isAllowOverDraft:
+          type: boolean
+        overDraftLimit:
+          type: number
+        status:
+          $ref: '#/components/schemas/SavingAccountStatus'
+  securitySchemes:
+    SecurityScheme:
+      type: http
+      description: Authentication
+      scheme: basic
