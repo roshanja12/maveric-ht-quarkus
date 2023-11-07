@@ -30,8 +30,6 @@ public class TransactionService {
     @Inject
     private ModelMapper mapper;
 
-
-
     @Transactional
     public boolean deposit(TransactionRequestDto requestDto) {
         Long accountId = requestDto.getAccountId();
