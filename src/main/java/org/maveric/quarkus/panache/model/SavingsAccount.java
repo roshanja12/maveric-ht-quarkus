@@ -39,7 +39,7 @@ public class SavingsAccount {
     private Instant createdDate;
     private Instant updatedDate;
     @Column(nullable = false)
-    private Long balance;
+    private BigDecimal balance;
     @Enumerated(EnumType.STRING)
     private SavingsAccountStatus status;
     @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
