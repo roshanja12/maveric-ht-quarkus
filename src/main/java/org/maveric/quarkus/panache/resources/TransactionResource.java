@@ -37,7 +37,6 @@ public class TransactionResource {
             @APIResponse(responseCode = "401", description = "Unauthorized request"),
             @APIResponse(responseCode = "404", description = "Resources not found"),})
     public Response withdraw(@RequestBody TransactionRequestDto requestDto){
-        log.info("1111111"+requestDto.toString());
        transactionService.withdraw(requestDto);
         return Response.status(HttpResponseStatus.OK.code()).entity("Withdraw Successful").build();
     }

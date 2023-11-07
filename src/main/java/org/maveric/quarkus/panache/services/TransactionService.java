@@ -31,7 +31,7 @@ public class TransactionService {
     private ModelMapper mapper;
 
     @Transactional
-    public boolean deposit(TransactionRequestDto requestDto) {
+    public void deposit(TransactionRequestDto requestDto) {
         Long accountId = requestDto.getAccountId();
         BigDecimal amount = requestDto.getAmount();
         SavingsAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
@@ -48,11 +48,10 @@ public class TransactionService {
         transactionRepository.persist(transaction);
         account.setBalance(transaction.getBalance());
         savingAccountRepository.persist(account);
-        System.out.println("Executing");
-       return true;
+
     }
     @Transactional
-    public boolean withdraw(TransactionRequestDto requestDto) {
+    public void withdraw(TransactionRequestDto requestDto) {
         Long accountId = requestDto.getAccountId();
         BigDecimal amount = requestDto.getAmount();
         SavingsAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
@@ -73,7 +72,7 @@ public class TransactionService {
 
         account.setBalance(transaction.getBalance());
         savingAccountRepository.persist(account);
-        return true;
+
     }
 
 
