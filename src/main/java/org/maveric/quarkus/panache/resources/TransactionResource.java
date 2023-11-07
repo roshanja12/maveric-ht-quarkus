@@ -14,7 +14,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.maveric.quarkus.panache.dtos.TransactionRequestDto;
 import org.maveric.quarkus.panache.dtos.TransactionResponseDto;
-import org.maveric.quarkus.panache.model.SavingAccount;
 import org.maveric.quarkus.panache.services.TransactionService;
 import java.util.List;
 

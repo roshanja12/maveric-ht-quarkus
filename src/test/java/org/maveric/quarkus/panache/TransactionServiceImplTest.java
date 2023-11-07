@@ -2,15 +2,15 @@ package org.maveric.quarkus.panache;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.maveric.quarkus.panache.exceptionHandler.SavingDetailsNotFoundException;
+import org.maveric.quarkus.panache.exceptionHandler.SavingsAccountDetailsNotFoundException;
+import org.maveric.quarkus.panache.model.SavingsAccount;
+import org.maveric.quarkus.panache.repository.SavingsAccountRepository;
 import org.maveric.quarkus.panache.services.TransactionService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.maveric.quarkus.panache.dtos.TransactionResponseDto;
-import org.maveric.quarkus.panache.model.SavingAccount;
 import org.maveric.quarkus.panache.model.Transaction;
-import org.maveric.quarkus.panache.repository.SavingAccountRepository;
 import org.maveric.quarkus.panache.repository.TransactionRepository;
 import org.modelmapper.ModelMapper;
 
@@ -28,7 +28,7 @@ public class TransactionServiceImplTest {
     private TransactionRepository transactionRepository;
 
     @Mock
-    private SavingAccountRepository savingAccountRepository;
+    private SavingsAccountRepository savingAccountRepository;
 
     @Mock
     private ModelMapper modelMapper;
@@ -41,7 +41,7 @@ public class TransactionServiceImplTest {
     @Test
     public void testGetTransactions() {
         Long savingsAccountId = 123L;
-        SavingAccount savingAccount = new SavingAccount();
+        SavingsAccount savingAccount = new SavingsAccount();
         savingAccount.setSavingsAccountId(1L);
         savingAccount.setSavingsAccountId(savingsAccountId);
         List<Transaction> transactions = new ArrayList<>();
@@ -66,7 +66,7 @@ public class TransactionServiceImplTest {
 
         try {
             transactionService.getTransactions(savingsAccountId, 1, 10);
-        } catch (SavingDetailsNotFoundException ex) {
+        } catch (SavingsAccountDetailsNotFoundException ex) {
 
         }
     }

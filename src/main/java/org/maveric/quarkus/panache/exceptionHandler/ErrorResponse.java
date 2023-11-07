@@ -8,8 +8,8 @@ import lombok.Getter;
 import java.time.Instant;
 import java.util.List;
 
-import static org.maveric.quarkus.panache.common.SavingAccountConstant.FAILED_MSG;
-import static org.maveric.quarkus.panache.common.SavingAccountConstant.SAVING_ACCOUNTS_URL_PATH;
+import static org.maveric.quarkus.panache.common.ApiConstants.SAVING_ACCOUNTS_URL_PATH;
+import static org.maveric.quarkus.panache.common.SavingsAccountConstant.FAILED_MSG;
 
 @Getter
 @EqualsAndHashCode

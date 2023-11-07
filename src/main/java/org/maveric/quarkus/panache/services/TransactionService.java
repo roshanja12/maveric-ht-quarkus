@@ -8,10 +8,10 @@ import org.maveric.quarkus.panache.dtos.TransactionRequestDto;
 import org.maveric.quarkus.panache.dtos.TransactionResponseDto;
 import org.maveric.quarkus.panache.enums.TransactionType;
 import org.maveric.quarkus.panache.exceptionHandler.InsufficientFundsException;
-import org.maveric.quarkus.panache.exceptionHandler.SavingDetailsNotFoundException;
-import org.maveric.quarkus.panache.model.SavingAccount;
+import org.maveric.quarkus.panache.exceptionHandler.SavingsAccountDetailsNotFoundException;
+import org.maveric.quarkus.panache.model.SavingsAccount;
 import org.maveric.quarkus.panache.model.Transaction;
-import org.maveric.quarkus.panache.repository.SavingAccountRepository;
+import org.maveric.quarkus.panache.repository.SavingsAccountRepository;
 import org.maveric.quarkus.panache.repository.TransactionRepository;
 import org.modelmapper.ModelMapper;
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ public class TransactionService {
     @Inject
     private TransactionRepository transactionRepository;
     @Inject
-    private SavingAccountRepository savingAccountRepository;
+    private SavingsAccountRepository savingAccountRepository;
     @Inject
     private ModelMapper mapper;
 
@@ -36,9 +36,9 @@ public class TransactionService {
     public boolean deposit(TransactionRequestDto requestDto) {
         Long accountId = requestDto.getAccountId();
         BigDecimal amount = requestDto.getAmount();
-        SavingAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
+        SavingsAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
         if (account == null) {
-            throw new SavingDetailsNotFoundException("Account not found");
+            throw new SavingsAccountDetailsNotFoundException("Account not found");
         }
         Transaction transaction = new Transaction();
         transaction.setSavingAccount(account);
@@ -57,9 +57,9 @@ public class TransactionService {
     public boolean withdraw(TransactionRequestDto requestDto) {
         Long accountId = requestDto.getAccountId();
         BigDecimal amount = requestDto.getAmount();
-        SavingAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
+        SavingsAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
         if (Objects.isNull(account)) {
-            throw new SavingDetailsNotFoundException("Account not found");
+            throw new SavingsAccountDetailsNotFoundException("Account not found");
         }
         if (account.getBalance().compareTo(amount) < 0) {
             throw new InsufficientFundsException("Insufficient funds");
@@ -80,9 +80,9 @@ public class TransactionService {
 
 
     public List<TransactionResponseDto> getTransactions(Long savingsAccountId, int pageNumber, int pageSize) {
-        SavingAccount account = savingAccountRepository.findBySavingsAccountId(savingsAccountId);
+        SavingsAccount account = savingAccountRepository.findBySavingsAccountId(savingsAccountId);
         if (Objects.isNull(account)) {
-            throw new SavingDetailsNotFoundException("Id Not Found " + savingsAccountId);
+            throw new SavingsAccountDetailsNotFoundException("Id Not Found " + savingsAccountId);
         }
         List<Transaction> transactions = this.transactionRepository.findBySavingAccount(savingsAccountId, pageNumber, pageSize);
         List<TransactionResponseDto> transactionResponseList = transactions.stream()
