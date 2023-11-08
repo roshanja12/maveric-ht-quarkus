@@ -9,6 +9,7 @@ import org.maveric.quarkus.panache.enums.TransactionType;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Table(name = "transactions")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
