@@ -9,6 +9,7 @@ import org.maveric.quarkus.panache.enums.TransactionType;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Table(name = "transactions")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class Transaction {
     private BigDecimal amount;
     private BigDecimal balance;
     private TransactionType type;
-    @JoinColumn(name = "saving_account_id")
+    @JoinColumn(name = "savings_account_id")
     @ManyToOne
-    private SavingAccount savingAccount;
+    private SavingsAccount savingAccount;
 }

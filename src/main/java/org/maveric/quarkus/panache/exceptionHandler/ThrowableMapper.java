@@ -1,6 +1,7 @@
 package org.maveric.quarkus.panache.exceptionHandler;
 
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Provider
 @Slf4j
+@RequestScoped
 public class ThrowableMapper implements ExceptionMapper<Throwable> {
 
     @Override
