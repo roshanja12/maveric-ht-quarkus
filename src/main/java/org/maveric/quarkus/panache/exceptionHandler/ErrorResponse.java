@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
@@ -13,6 +14,7 @@ import static org.maveric.quarkus.panache.common.SavingsAccountConstant.FAILED_M
 
 @Getter
 @EqualsAndHashCode
+@Setter
 public class ErrorResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,10 +27,15 @@ public class ErrorResponse {
     private Instant timeStamp = Instant.now();
     private Object data;
 
-    public ErrorResponse(String errorId, ErrorMessage errorMessage) {
+    public ErrorResponse(String errorId, ErrorMessage errorMessage,Integer code ) {
         this.errorId = errorId;
         this.errors = List.of(errorMessage);
+        this.code=code;
     }
+
+  public ErrorResponse(String errorId, ErrorMessage errorMessage) {
+    this(errorId,errorMessage, HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+  }
 
     public ErrorResponse(ErrorMessage errorMessage) {
         this(null, errorMessage);
