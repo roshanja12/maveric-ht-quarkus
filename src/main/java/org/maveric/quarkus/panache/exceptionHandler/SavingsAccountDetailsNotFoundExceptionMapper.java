@@ -10,11 +10,8 @@ public class SavingsAccountDetailsNotFoundExceptionMapper implements ExceptionMa
     @Override
     public Response toResponse(SavingsAccountDetailsNotFoundException e) {
         ErrorResponse.ErrorMessage errorMessages =
-
-                new ErrorResponse.ErrorMessage("/api/v1/accounts/saving",
-                        e.getMessage());
                 new ErrorResponse.ErrorMessage(e.getMessage());
-        return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(errorMessages)).build();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorResponse(errorMessages)).build();
     }
 }
 

@@ -1,6 +1,5 @@
 package org.maveric.quarkus.panache.dtos;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +8,7 @@ import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,9 +16,9 @@ public class SavingsAccountResponseDto {
 
   private Long savingsAccountId;
   private Long customerId;
-  private String fullName;
-  private String email;
-  private Long phoneNumber;
+  private String customerName;
+  private String customerEmail;
+  private Long customerPhone;
   private BigDecimal minOpeningBalance;
 
   private InterestCompoundPeriod interestCompoundPeriod;

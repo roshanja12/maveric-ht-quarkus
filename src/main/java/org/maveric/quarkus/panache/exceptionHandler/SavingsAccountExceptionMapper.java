@@ -11,8 +11,8 @@ public class SavingsAccountExceptionMapper implements ExceptionMapper<SavingsAcc
     ErrorResponse.ErrorMessage errorMessages =
       new ErrorResponse.ErrorMessage(e.getMessage());
     ErrorResponse response = new ErrorResponse(errorMessages);
-    response.setCode(Response.Status.BAD_REQUEST.getStatusCode());
+    response.setCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
 
-    return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
+    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
   }
 }
