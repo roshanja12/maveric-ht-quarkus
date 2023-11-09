@@ -204,9 +204,9 @@ public class SavingsAccountServices {
      validateFile(file);
      Blob blob = createDocumentBlob(file);
      SavingsAccount savingsAccount  = UtilsMethods.toSavingAccount(savingsAccountRequestDto, file.fileName(), blob);
-    savingsAccount.setFullName(customerDto.getFirstName()+" "+customerDto.getLastName());
-    savingsAccount.setPhoneNumber(customerDto.getPhoneNumber());
-    savingsAccount.setEmail(customerDto.getEmail());
+    savingsAccount.setCustomerName(customerDto.getFirstName()+" "+customerDto.getLastName());
+    savingsAccount.setCustomerPhone(customerDto.getPhoneNumber());
+    savingsAccount.setCustomerEmail(customerDto.getEmail());
      if (!savingsAccountRequestDto.getIsAllowOverDraft() && savingsAccountRequestDto.getOverDraftLimit() != null) {
        log.error("Attempted to set overdraft limit when not allowed.");
        throw new SavingsAccountException("Not able to add OverDraftLimit");

@@ -24,12 +24,12 @@ public class SavingsAccount {
   private Long savingsAccountId;
   @Column(name = "customer_id", nullable = false)
   private Long customerId;
-  @Column(name = "full_name")
-  private String fullName;
-  @Column(name = "email_address")
-  private String email;
-  @Column(name = "phone_number")
-  private Long phoneNumber;
+  @Column(name = "customer_name")
+  private String customerName;
+  @Column(name = "customer_email")
+  private String customerEmail;
+  @Column(name = "customer_phone")
+  private Long customerPhone;
   @Column(name = "min_opening_balance", nullable = false)
   private BigDecimal minOpeningBalance;
   @Column(name = "interest_compound_period", nullable = false)

@@ -16,7 +16,7 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
         List<ErrorResponse.ErrorMessage> errorMessages = e.getConstraintViolations().stream()
                 .map(constraintViolation -> new ErrorResponse.ErrorMessage(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage()))
                 .collect(Collectors.toList());
-        return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(errorMessages)).build();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorResponse(errorMessages)).build();
     }
 
 }
