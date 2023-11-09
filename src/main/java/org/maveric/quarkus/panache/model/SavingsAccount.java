@@ -8,6 +8,7 @@ import org.maveric.quarkus.panache.enums.InterestCompoundPeriod;
 import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.time.Instant;
 import java.util.List;
 
@@ -17,31 +18,34 @@ import java.util.List;
 @Entity
 public class SavingsAccount {
 
-    @Id
-    @GeneratedValue
-    private Long savingsAccountId;
-    @Column(nullable = false)
-    private Long customerId;
-    @Column(nullable = false)
-    private String customerName;
-    @Column(nullable = false)
-    private String customerEmail;
-    @Column(nullable = false)
-    private Integer customerPhone;
-    @Column(nullable = false)
-    private BigDecimal minOpeningBalance;
-    @Column(nullable = false)
-    private InterestCompoundPeriod interestCompoundPeriod;
-    @Column(nullable = false)
-    private Boolean isAllowOverDraft;
-    private BigDecimal overDraftLimit;
-    private byte[] documents;
-    private Instant createdDate;
-    private Instant updatedDate;
-    @Column(nullable = false)
-    private BigDecimal balance;
-    @Enumerated(EnumType.STRING)
-    private SavingsAccountStatus status;
-    @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Transaction> transactions;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "savings_account_id")
+  private Long savingsAccountId;
+  @Column(name = "customer_id", nullable = false)
+  private Long customerId;
+
+  @Column(name = "min_opening_balance", nullable = false)
+  private BigDecimal minOpeningBalance;
+  @Column(name = "interest_compound_period", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private InterestCompoundPeriod interestCompoundPeriod;
+  @Column(name = "allow_overdraft")
+  private Boolean isAllowOverDraft;
+  @Column(name = "over_draft_limit")
+  private BigDecimal overDraftLimit;
+  private Blob document;
+  @Column(name = "document_name")
+  private String documentName;
+  @Column(name = "created_date")
+  private Instant createdDate;
+  @Column(name = "updated_date")
+  private Instant updatedDate;
+  @Column(name = "account_balance", nullable = false)
+  private BigDecimal balance;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "account_status")
+  private SavingsAccountStatus status;
+  @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private List<Transaction> transactions;
 }

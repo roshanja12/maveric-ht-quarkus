@@ -1,6 +1,7 @@
 package org.maveric.quarkus.panache.resources;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -12,10 +13,16 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.jboss.resteasy.reactive.PartType;
+import org.jboss.resteasy.reactive.RestForm;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.maveric.quarkus.panache.dtos.ResponseDto;
 import org.maveric.quarkus.panache.dtos.SavingsAccountRequestDto;
+import org.maveric.quarkus.panache.dtos.SavingsAccountResponseDto;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
 import org.maveric.quarkus.panache.services.SavingsAccountServices;
+
+import java.time.Instant;
 
 /* @author meleto sofiya */
 @Path("/api/v1/accounts/saving")
@@ -31,6 +38,7 @@ public class SavingsAccountResource {
     }
 
     @POST
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
     @Operation(summary = "This Api creates saving account for customer")
     @APIResponses({@APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
             @APIResponse(responseCode = "500", description = "Internal Server Error: An unexpected error occurred"),
@@ -42,28 +50,21 @@ public class SavingsAccountResource {
                     }),
             @APIResponse(responseCode = "401", description = "Unauthorized request"),
             @APIResponse(responseCode = "404", description = "Resources not found"),})
-    public Response createAccount(@RequestBody SavingsAccountRequestDto savingBankDto) {
 
 
-        ResponseDto responseDto = new ResponseDto();
-        if (responseDto == null) {
-            responseDto.setStatus("Success");
-            responseDto.setMessage("Account Created Successfully");
-            responseDto.setError(null);
-            responseDto.setPath("/api/v1/accounts/saving");
-            responseDto.setData(null);
-            return Response.status(400).entity(responseDto).build();
-
-        }
-        responseDto.setStatus("Success");
-        responseDto.setCode(HttpResponseStatus.OK.code());
-        responseDto.setMessage("Account Created Successfully");
-        responseDto.setError(null);
-        responseDto.setPath("/save-account");
-        responseDto.setData(null);
-        return Response.status(201).entity(responseDto).build();
+public Response createAccount(@RestForm("image") FileUpload file, @RestForm @PartType(MediaType.APPLICATION_JSON) @Valid SavingsAccountRequestDto savingsAccountRequestDto) throws Exception {
+      SavingsAccountResponseDto accountResponse = services.createAccount(file, savingsAccountRequestDto);
+      ResponseDto responseDto = ResponseDto.builder()
+        .status("success")
+        .message("Savings Account Created Successfully")
+        .code(201)
+        .error(null)
+        .path("/api/v1/accounts/saving")
+        .timeStamp(Instant.now())
+        .data(accountResponse)
+        .build();
+      return Response.status(201).entity(responseDto).build();
     }
-
     @PUT
     @Operation(summary = " This Api for update draft details and status of accounts")
     @APIResponses({@APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
