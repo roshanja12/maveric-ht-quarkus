@@ -24,7 +24,12 @@ public class SavingsAccount {
   private Long savingsAccountId;
   @Column(name = "customer_id", nullable = false)
   private Long customerId;
-
+  @Column(name = "customer_name")
+  private String customerName;
+  @Column(name = "customer_email")
+  private String customerEmail;
+  @Column(name = "customer_phone")
+  private Long customerPhone;
   @Column(name = "min_opening_balance", nullable = false)
   private BigDecimal minOpeningBalance;
   @Column(name = "interest_compound_period", nullable = false)
@@ -48,4 +53,6 @@ public class SavingsAccount {
   private SavingsAccountStatus status;
   @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Transaction> transactions;
+
+
 }
