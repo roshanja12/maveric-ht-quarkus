@@ -56,7 +56,7 @@ public class SavingsAccountServices {
 
   @RestClient
   @Inject
-   CustomerProxy proxy;
+  CustomerProxy proxy;
   @Inject
   ModelMapper modelMapper;
   @Transactional
