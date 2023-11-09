@@ -12,9 +12,12 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.maveric.quarkus.panache.dtos.ResponseDto;
 import org.maveric.quarkus.panache.dtos.TransactionRequestDto;
 import org.maveric.quarkus.panache.dtos.TransactionResponseDto;
 import org.maveric.quarkus.panache.services.TransactionService;
+
+import java.time.Instant;
 import java.util.List;
 
 @Path("/api/v1/accounts/saving")
@@ -35,7 +38,15 @@ public class TransactionResource {
             @APIResponse(responseCode = "404", description = "Resources not found"),})
     public Response withdraw(@RequestBody TransactionRequestDto requestDto){
        transactionService.withdraw(requestDto);
-        return Response.status(HttpResponseStatus.OK.code()).entity("Withdraw Successful").build();
+        ResponseDto responseDto = ResponseDto.builder()
+                .status("success")
+                .message("Withdraw Successful")
+                .code(201)
+                .error(null)
+                .path("/api/v1/accounts/saving")
+                .timeStamp(Instant.now())
+                .build();
+        return Response.status(200).entity(responseDto).build();
     }
     @PUT
     @Path("/deposits")
@@ -47,7 +58,15 @@ public class TransactionResource {
             @APIResponse(responseCode = "404", description = "Resources not found"),})
     public Response deposit(@RequestBody TransactionRequestDto requestDto){
         transactionService.deposit(requestDto);
-        return Response.status(HttpResponseStatus.OK.code()).entity("Deposit Successful").build();
+        ResponseDto responseDto = ResponseDto.builder()
+                .status("success")
+                .message("Deposit Successful")
+                .code(201)
+                .error(null)
+                .path("/api/v1/accounts/saving")
+                .timeStamp(Instant.now())
+                .build();
+        return Response.status(200).entity(responseDto).build();
     }
     @GET
     @Path("/{savingsAccountId}/transactions")
