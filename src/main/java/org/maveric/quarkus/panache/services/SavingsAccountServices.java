@@ -10,10 +10,8 @@ import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import org.maveric.quarkus.panache.dtos.ResponseDto;
-import org.maveric.quarkus.panache.dtos.SavingsAccountRequestDto;
-import org.maveric.quarkus.panache.dtos.SavingsAccountResponseDto;
-import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
+import org.maveric.quarkus.panache.common.UtilsMethods;
+import org.maveric.quarkus.panache.dtos.*;
 import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
 import org.maveric.quarkus.panache.exceptionHandler.CustomerProxyException;
 import org.maveric.quarkus.panache.exceptionHandler.SavingsAccountDetailsNotFoundException;
@@ -58,8 +56,9 @@ public class SavingsAccountServices {
 
   @RestClient
   @Inject
-  private CustomerProxy proxy;
-
+  CustomerProxy proxy;
+  @Inject
+  ModelMapper modelMapper;
   @Transactional
   public ResponseDto updateAccountsDetails(UpdateAccountsRequestDto updateAccountsRequestDto) {
     log.info("Request  ::  {}", updateAccountsRequestDto);
@@ -190,7 +189,6 @@ public class SavingsAccountServices {
     SavingsAccountResponseDto responseDto = null;
     try {
       savingAccountRepository.persist(savingsAccount);
-      ModelMapper modelMapper = new ModelMapper();
       responseDto = modelMapper.map(savingsAccount, SavingsAccountResponseDto.class);
       log.info("Saving account created successfully.");
       return responseDto;
@@ -200,31 +198,22 @@ public class SavingsAccountServices {
     }
   }
 
-  private SavingsAccount createAccountObject(FileUpload file, SavingsAccountRequestDto savingsAccountRequestDto) throws IOException, SQLException, CustomerProxyException {
-    log.info("Attempting to create an SavingAccount object");
-    SavingsAccount savingsAccount = null;
-    validateCustomerProxy(savingsAccountRequestDto.getCustomerId());
-    validateFile(file);
-    Blob blob = createDocumentBlob(file);
-    try {
-      ModelMapper modelMapper = new ModelMapper();
-      savingsAccount = modelMapper.map(savingsAccountRequestDto, SavingsAccount.class);
-      savingsAccount.setStatus(SavingsAccountStatus.ACTIVE);
-      savingsAccount.setCreatedDate(Instant.now());
-      savingsAccount.setUpdatedDate(Instant.now());
-      savingsAccount.setDocument(blob);
-      savingsAccount.setDocumentName(file.fileName());
-      savingsAccount.setSavingsAccountId(null);
-      if (!savingsAccountRequestDto.getIsAllowOverDraft() && savingsAccountRequestDto.getOverDraftLimit() != null) {
-        log.error("Attempted to set overdraft limit when not allowed.");
-        throw new SavingsAccountException("Not able to add OverDraftLimit");
-      }
-    } catch (Exception e) {
-      log.error("Error creating an Account Object: " + e.getMessage());
-      throw e;
-    }
-    return savingsAccount;
-  }
+   private SavingsAccount createAccountObject(FileUpload file, SavingsAccountRequestDto savingsAccountRequestDto) throws IOException, SQLException, CustomerProxyException {
+     log.info("Attempting to create an SavingAccount object");
+     CustomerDto customerDto=validateCustomerProxy(savingsAccountRequestDto.getCustomerId());
+     validateFile(file);
+     Blob blob = createDocumentBlob(file);
+     SavingsAccount savingsAccount  = UtilsMethods.toSavingAccount(savingsAccountRequestDto, file.fileName(), blob);
+    savingsAccount.setCustomerName(customerDto.getFirstName()+" "+customerDto.getLastName());
+    savingsAccount.setCustomerPhone(customerDto.getPhoneNumber());
+    savingsAccount.setCustomerEmail(customerDto.getEmail());
+     if (!savingsAccountRequestDto.getIsAllowOverDraft() && savingsAccountRequestDto.getOverDraftLimit() != null) {
+       log.error("Attempted to set overdraft limit when not allowed.");
+       throw new SavingsAccountException("Not able to add OverDraftLimit");
+     }
+
+     return savingsAccount;
+   }
 
   private Blob createDocumentBlob(FileUpload file) throws SQLException, IOException {
     try {
@@ -260,10 +249,14 @@ public class SavingsAccountServices {
 
   }
 
-  private void validateCustomerProxy(Long customerId) throws CustomerProxyException {
+  private CustomerDto validateCustomerProxy(Long customerId) throws CustomerProxyException {
     try {
       log.info("Validating the Customer by connecting to Customer Service");
       Response response = proxy.getCustomerByCustomerId(customerId);
+      ResponseDto responseDto=response.readEntity(ResponseDto.class);
+      CustomerDto customerDto= modelMapper.map(responseDto.getData(),CustomerDto.class);
+      log.info("Validating the Customer by connecting to Customer Service");
+      return customerDto;
     } catch (Exception e) {
       log.error("Validating the Customer failed");
       throw new CustomerProxyException("customer not found for id=" + customerId, e);

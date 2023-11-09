@@ -13,7 +13,6 @@ public class ExceptionMapper<I extends RuntimeException> implements jakarta.ws.r
 
     @Override
     public Response toResponse(Exception e) {
-        log.info(e +"Error Occured ");
         ErrorResponse.ErrorMessage errorMessages =
                 new ErrorResponse.ErrorMessage( e.getMessage());
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorResponse(errorMessages)).build();
