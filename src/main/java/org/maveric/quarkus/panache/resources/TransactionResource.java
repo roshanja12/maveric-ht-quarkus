@@ -23,11 +23,8 @@ import java.util.List;
 @Tag(name = "Saving Account Transaction End Points")
 @Slf4j
 public class TransactionResource {
-
     @Inject
     private TransactionService transactionService;
-
-
     @PUT
     @Path("/withdraws")
     @Operation(summary = "This Api perform debit operation of a customer ")
