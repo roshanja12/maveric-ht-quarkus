@@ -1,6 +1,13 @@
 package org.maveric.quarkus.panache.common;
 
 import org.maveric.quarkus.panache.dtos.ResponseDto;
+import org.maveric.quarkus.panache.dtos.SavingsAccountRequestDto;
+import org.maveric.quarkus.panache.enums.SavingsAccountStatus;
+import org.maveric.quarkus.panache.model.SavingsAccount;
+import org.modelmapper.ModelMapper;
+
+import java.sql.Blob;
+import java.time.Instant;
 
 public class UtilsMethods {
 
@@ -39,5 +46,15 @@ public class UtilsMethods {
         return index;
     }
 
-
+  public static SavingsAccount toSavingAccount(SavingsAccountRequestDto dto, String fileName, Blob blob){
+    ModelMapper mapper=new ModelMapper();
+    SavingsAccount savingsAccount = mapper.map(dto, SavingsAccount.class);
+    savingsAccount.setStatus(SavingsAccountStatus.ACTIVE);
+    savingsAccount.setCreatedDate(Instant.now());
+    savingsAccount.setUpdatedDate(Instant.now());
+    savingsAccount.setDocument(blob);
+    savingsAccount.setDocumentName(fileName);
+    savingsAccount.setSavingsAccountId(null);
+    return savingsAccount;
+  }
 }
