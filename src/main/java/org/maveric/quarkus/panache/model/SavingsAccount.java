@@ -1,5 +1,6 @@
 package org.maveric.quarkus.panache.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +40,7 @@ public class SavingsAccount {
   private Boolean isAllowOverDraft;
   @Column(name = "over_draft_limit")
   private BigDecimal overDraftLimit;
+  @JsonIgnore
   private Blob document;
   @Column(name = "document_name")
   private String documentName;
@@ -51,8 +53,8 @@ public class SavingsAccount {
   @Enumerated(EnumType.STRING)
   @Column(name = "account_status")
   private SavingsAccountStatus status;
-
   private String city;
+  @JsonIgnore
   @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Transaction> transactions;
 

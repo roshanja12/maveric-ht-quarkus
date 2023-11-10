@@ -8,7 +8,8 @@ import jakarta.ws.rs.ext.Provider;
 public class InsufficientFundsExceptionMapper implements ExceptionMapper<InsufficientFundsException> {
     @Override
     public Response toResponse(InsufficientFundsException exception) {
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Insufficient Funds:"+exception.getMessage()).build();
+
+        ErrorResponse.ErrorMessage errorMessage=new ErrorResponse.ErrorMessage(exception.getMessage());
+        return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(errorMessage)).build();
     }
 }
