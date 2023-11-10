@@ -56,7 +56,7 @@ public class SavingsAccountServices {
 
   @RestClient
   @Inject
-   CustomerProxy proxy;
+  CustomerProxy proxy;
   @Inject
   ModelMapper modelMapper;
   @Transactional
@@ -109,6 +109,7 @@ public class SavingsAccountServices {
       } else {
         query = QUERY_NOT_NUMERIC;
         queryResult = savingAccountRepository.find(query, search);
+
       }
 
       List<SavingsAccount> savingAccountList = queryResult.page(Page.of(index, size)).list();
@@ -198,22 +199,23 @@ public class SavingsAccountServices {
     }
   }
 
-   private SavingsAccount createAccountObject(FileUpload file, SavingsAccountRequestDto savingsAccountRequestDto) throws IOException, SQLException, CustomerProxyException {
-     log.info("Attempting to create an SavingAccount object");
-     CustomerDto customerDto=validateCustomerProxy(savingsAccountRequestDto.getCustomerId());
-     validateFile(file);
-     Blob blob = createDocumentBlob(file);
-     SavingsAccount savingsAccount  = UtilsMethods.toSavingAccount(savingsAccountRequestDto, file.fileName(), blob);
+  private SavingsAccount createAccountObject(FileUpload file, SavingsAccountRequestDto savingsAccountRequestDto) throws IOException, SQLException, CustomerProxyException {
+    log.info("Attempting to create an SavingAccount object");
+    CustomerDto customerDto=validateCustomerProxy(savingsAccountRequestDto.getCustomerId());
+    validateFile(file);
+    Blob blob = createDocumentBlob(file);
+    SavingsAccount savingsAccount  = UtilsMethods.toSavingAccount(savingsAccountRequestDto, file.fileName(), blob);
     savingsAccount.setCustomerName(customerDto.getFirstName()+" "+customerDto.getLastName());
     savingsAccount.setCustomerPhone(customerDto.getPhoneNumber());
     savingsAccount.setCustomerEmail(customerDto.getEmail());
-     if (!savingsAccountRequestDto.getIsAllowOverDraft() && savingsAccountRequestDto.getOverDraftLimit() != null) {
-       log.error("Attempted to set overdraft limit when not allowed.");
-       throw new SavingsAccountException("Not able to add OverDraftLimit");
-     }
+    savingsAccount.setCity(customerDto.getCity());
+    if (!savingsAccountRequestDto.getIsAllowOverDraft() && savingsAccountRequestDto.getOverDraftLimit() != null) {
+      log.error("Attempted to set overdraft limit when not allowed.");
+      throw new SavingsAccountException("Not able to add OverDraftLimit");
+    }
 
-     return savingsAccount;
-   }
+    return savingsAccount;
+  }
 
   private Blob createDocumentBlob(FileUpload file) throws SQLException, IOException {
     try {

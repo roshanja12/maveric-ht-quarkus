@@ -51,6 +51,8 @@ public class SavingsAccount {
   @Enumerated(EnumType.STRING)
   @Column(name = "account_status")
   private SavingsAccountStatus status;
+
+  private String city;
   @OneToMany(mappedBy = "savingAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Transaction> transactions;
 
