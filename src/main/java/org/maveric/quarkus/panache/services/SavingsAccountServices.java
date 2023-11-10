@@ -198,19 +198,20 @@ public class SavingsAccountServices {
         }
     }
 
-    private SavingsAccount createAccountObject(FileUpload file, SavingsAccountRequestDto savingsAccountRequestDto) throws IOException, SQLException, CustomerProxyException {
-        log.info("Attempting to create an SavingAccount object");
-        CustomerDto customerDto = validateCustomerProxy(savingsAccountRequestDto.getCustomerId());
-        validateFile(file);
-        Blob blob = createDocumentBlob(file);
-        SavingsAccount savingsAccount = UtilsMethods.toSavingAccount(savingsAccountRequestDto, file.fileName(), blob);
-        savingsAccount.setCustomerName(customerDto.getFirstName() + " " + customerDto.getLastName());
-        savingsAccount.setCustomerPhone(customerDto.getPhoneNumber());
-        savingsAccount.setCustomerEmail(customerDto.getEmail());
-        if (!savingsAccountRequestDto.getIsAllowOverDraft() && savingsAccountRequestDto.getOverDraftLimit() != null) {
-            log.error("Attempted to set overdraft limit when not allowed.");
-            throw new SavingsAccountException("Not able to add OverDraftLimit");
-        }
+  private SavingsAccount createAccountObject(FileUpload file, SavingsAccountRequestDto savingsAccountRequestDto) throws IOException, SQLException, CustomerProxyException {
+    log.info("Attempting to create an SavingAccount object");
+    CustomerDto customerDto=validateCustomerProxy(savingsAccountRequestDto.getCustomerId());
+    validateFile(file);
+    Blob blob = createDocumentBlob(file);
+    SavingsAccount savingsAccount  = UtilsMethods.toSavingAccount(savingsAccountRequestDto, file.fileName(), blob);
+    savingsAccount.setCustomerName(customerDto.getFirstName()+" "+customerDto.getLastName());
+    savingsAccount.setCustomerPhone(customerDto.getPhoneNumber());
+    savingsAccount.setCustomerEmail(customerDto.getEmail());
+    savingsAccount.setCity(customerDto.getCity());
+    if (!savingsAccountRequestDto.getIsAllowOverDraft() && savingsAccountRequestDto.getOverDraftLimit() != null) {
+      log.error("Attempted to set overdraft limit when not allowed.");
+      throw new SavingsAccountException("Not able to add OverDraftLimit");
+    }
 
         return savingsAccount;
     }
@@ -228,27 +229,26 @@ public class SavingsAccountServices {
     }
 
     private void validateFile(FileUpload file) throws IOException {
-        try {
-            log.info("Validating the uploaded File");
-            if (file == null || file.fileName().equalsIgnoreCase("")) {
-                log.error("File is null or empty");
-                throw new UnsupportedFileTypeException("File cannot be null");
-            }
-            if (!file.fileName().toLowerCase().endsWith(".jpeg") && !file.fileName().toLowerCase().endsWith(".jpg")) {
-                log.error("Unsupported file type");
-                throw new UnsupportedFileTypeException("File Type Not Supported");
-            }
-            if (Files.size(file.filePath()) > 1024 * 1024) {
-                log.error("File size exceeds maximum limit");
-                throw new UnsupportedFileTypeException("File Size Exceeds Maximum Limit");
-            }
-        } catch (Exception e) {
-            log.error("Error validating file: " + e.getMessage());
-            throw e;
+      try {
+        log.info("Validating the uploaded File");
+        if (file == null || file.fileName().equalsIgnoreCase("")) {
+          log.error("File is null or empty");
+          throw new UnsupportedFileTypeException("File cannot be null");
         }
+        if (!file.fileName().toLowerCase().endsWith(".jpeg") && !file.fileName().toLowerCase().endsWith(".jpg")) {
+          log.error("Unsupported file type");
+          throw new UnsupportedFileTypeException("File Type Not Supported");
+        }
+        if (Files.size(file.filePath()) > 1024 * 1024) {
+          log.error("File size exceeds maximum limit");
+          throw new UnsupportedFileTypeException("File Size Exceeds Maximum Limit");
+        }
+      } catch (Exception e) {
+        log.error("Error validating file: " + e.getMessage());
+        throw e;
+      }
 
     }
-
     private CustomerDto validateCustomerProxy(Long customerId) throws CustomerProxyException {
         try {
             log.info("Validating the Customer by connecting to Customer Service");
