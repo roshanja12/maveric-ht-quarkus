@@ -1,6 +1,7 @@
 package org.maveric.quarkus.panache.resources;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -20,6 +21,7 @@ import org.maveric.quarkus.panache.dtos.ResponseDto;
 import org.maveric.quarkus.panache.dtos.SavingsAccountRequestDto;
 import org.maveric.quarkus.panache.dtos.SavingsAccountResponseDto;
 import org.maveric.quarkus.panache.dtos.UpdateAccountsRequestDto;
+import org.maveric.quarkus.panache.services.MessagingService;
 import org.maveric.quarkus.panache.services.SavingsAccountServices;
 
 import java.time.Instant;
@@ -30,7 +32,8 @@ import java.time.Instant;
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Saving Account End Points")
 public class SavingsAccountResource {
-
+  @Inject
+  MessagingService messagingService;
     SavingsAccountServices services;
 
     public SavingsAccountResource(SavingsAccountServices services) {
@@ -63,6 +66,7 @@ public Response createAccount(@RestForm("image") FileUpload file, @RestForm @Par
         .timeStamp(Instant.now())
         .data(accountResponse)
         .build();
+      messagingService.savingsAccountProducer(accountResponse);
       return Response.status(201).entity(responseDto).build();
     }
     @PUT

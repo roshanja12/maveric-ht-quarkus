@@ -14,7 +14,7 @@ You can run your application in dev mode that enables live coding using:
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
 ## Packaging and running the application
-
+[common](src%2Fmain%2Fjava%2Forg%2Fmaveric%2Fquarkus%2Fpanache%2Fcommon)
 The application can be packaged using:
 ```shell script
 ./mvnw package
