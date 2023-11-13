@@ -30,7 +30,8 @@ public class SavingsAccountResponseDto {
   private Instant createdDate;
   private Instant updatedDate;
 
-  private Long balance;
+  private BigDecimal balance;
   private SavingsAccountStatus status;
+  private String city;
 
 }
