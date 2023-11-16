@@ -105,7 +105,7 @@ public Response createAccount(@RestForm("image") FileUpload file, @RestForm @Par
     }
 
     @GET
-    @Path("/{accountId}")
+    @Path("/customer/{accountId}")
     @Operation(summary = "This Api to get saving account details based on accountId")
     @APIResponses({@APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
             @APIResponse(responseCode = "500", description = "Internal Server Error: An unexpected error occurred"),
@@ -124,7 +124,7 @@ public Response createAccount(@RestForm("image") FileUpload file, @RestForm @Par
     }
 
     @GET
-    @Path("/{customerId}")
+    @Path("/customer/{customerId}")
     @Operation(summary = "This Api to get saving account details based on customerId")
     @APIResponses({@APIResponse(responseCode = "400", description = "Bad Request: The request is invalid"),
             @APIResponse(responseCode = "500", description = "Internal Server Error: An unexpected error occurred"),
