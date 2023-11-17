@@ -64,7 +64,7 @@ public class SavingsAccountServices {
         log.info("Request  ::  {}", updateAccountsRequestDto);
         ResponseDto responseDto = null;
         try {
-            SavingsAccount savingAccount = savingAccountRepository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId());
+            List<SavingsAccount> savingAccount = savingAccountRepository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId());
 
             if (savingAccount == null) {
                 log.error("Saving account detail not present in db");
@@ -140,7 +140,7 @@ public class SavingsAccountServices {
         log.info("Request  ::  accountId {}", accountId);
         ResponseDto responseDto = null;
         try {
-            SavingsAccount savingAccount = savingAccountRepository.findBySavingsAccountId(accountId);
+            List<SavingsAccount> savingAccount = savingAccountRepository.findBySavingsAccountId(accountId);
 
             if (savingAccount == null) {
                 log.error("Saving account detail not present in db");
