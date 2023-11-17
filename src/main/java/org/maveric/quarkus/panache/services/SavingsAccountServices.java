@@ -140,7 +140,7 @@ public class SavingsAccountServices {
         log.info("Request  ::  accountId {}", accountId);
         ResponseDto responseDto = null;
         try {
-            SavingsAccount savingAccount = savingAccountRepository.findBySavingsAccountId(accountId);
+            List<SavingsAccount> savingAccount = savingAccountRepository.findBySavingsAccountListById(accountId);
 
             if (savingAccount == null) {
                 log.error("Saving account detail not present in db");
@@ -148,7 +148,7 @@ public class SavingsAccountServices {
             }
 
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
-                    UPDATED_SUCCESS_RESPONSE_MSG, savingAccount, SAVING_ACCOUNTS_URL_PATH);
+                    GET_SUCCESS_RESPONSE_MSG, savingAccount, SAVING_ACCOUNTS_URL_PATH);
             log.info("Response :: {} ", responseDto);
         } catch (SavingsAccountDetailsNotFoundException e) {
             log.error("error :: " + e.getMessage());
@@ -165,7 +165,7 @@ public class SavingsAccountServices {
         log.info("Request  ::  customerId {}", customerId);
         ResponseDto responseDto = null;
         try {
-            SavingsAccount savingAccount = savingAccountRepository.findByCustomerId(customerId);
+            List<SavingsAccount> savingAccount = savingAccountRepository.findByCustomerListById(customerId);
 
             if (savingAccount == null) {
                 log.error("Saving account detail not present in db");
@@ -173,7 +173,7 @@ public class SavingsAccountServices {
             }
 
             responseDto = getResponseStructure(SUCCESS_MSG, HttpResponseStatus.OK.code(),
-                    UPDATED_SUCCESS_RESPONSE_MSG, savingAccount, SAVING_ACCOUNTS_URL_PATH);
+                    GET_SUCCESS_RESPONSE_MSG, savingAccount, SAVING_ACCOUNTS_URL_PATH);
             log.info("Response :: {} ", responseDto);
         } catch (Exception e) {
             log.error("error :: " + e.getMessage());
