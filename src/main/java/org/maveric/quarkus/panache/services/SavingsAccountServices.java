@@ -42,9 +42,9 @@ import static org.maveric.quarkus.panache.common.UtilsMethods.*;
 @ApplicationScoped
 public class SavingsAccountServices {
 
-    public static final String QUERY_NUMERIC = " WHERE  customerId = ?1 OR customerPhone = ?1  ORDER BY savingsAccountId DESC ";
+    public static final String QUERY_NUMERIC = " WHERE  cast(customerId as text)  LIKE   ?1 OR cast(customerPhone as text)  LIKE   ?1 ORDER BY savingsAccountId DESC ";
 
-    public static final String QUERY_NOT_NUMERIC = " WHERE customerName = ?1 OR customerEmail = ?1  ORDER BY savingsAccountId DESC ";
+    public static final String QUERY_NOT_NUMERIC = " WHERE customerName LIKE ?1 OR customerEmail LIKE ?1  ORDER BY savingsAccountId DESC ";
 
     public static final String NON_SEARCH_QUERY = " ORDER BY savingsAccountId DESC ";
     SavingsAccountRepository savingAccountRepository;
@@ -105,10 +105,10 @@ public class SavingsAccountServices {
                 queryResult = savingAccountRepository.find(query);
             } else if (isNumeric(search)) {
                 query = QUERY_NUMERIC;
-                queryResult = savingAccountRepository.find(query, parseInt(search));
+                queryResult = savingAccountRepository.find(query,"%" +search+"%");
             } else {
                 query = QUERY_NOT_NUMERIC;
-                queryResult = savingAccountRepository.find(query, search);
+                queryResult = savingAccountRepository.find(query, "%" +search+"%");
             }
 
             List<SavingsAccount> savingAccountList = queryResult.page(Page.of(index, size)).list();
