@@ -49,7 +49,7 @@ public class UtilsMethods {
   public static SavingsAccount toSavingAccount(SavingsAccountRequestDto dto, String fileName, Blob blob){
     ModelMapper mapper=new ModelMapper();
     SavingsAccount savingsAccount = mapper.map(dto, SavingsAccount.class);
-    savingsAccount.setStatus(SavingsAccountStatus.ACTIVE);
+    savingsAccount.setStatus(SavingsAccountStatus.APPLIED);
     savingsAccount.setCreatedDate(Instant.now());
     savingsAccount.setUpdatedDate(Instant.now());
     savingsAccount.setDocument(blob);
