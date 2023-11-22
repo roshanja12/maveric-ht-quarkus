@@ -7,12 +7,14 @@ import io.quarkus.test.Mock;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.maveric.quarkus.panache.dtos.ResponseDto;
 import org.maveric.quarkus.panache.dtos.TransactionRequestDto;
 
+import org.maveric.quarkus.panache.dtos.TransactionResponseDto;
 import org.maveric.quarkus.panache.resources.TransactionResource;
 import org.maveric.quarkus.panache.services.TransactionService;
 import org.mockito.Mockito;
