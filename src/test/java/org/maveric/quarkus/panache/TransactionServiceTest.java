@@ -1,5 +1,6 @@
 package org.maveric.quarkus.panache;
 
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.maveric.quarkus.panache.dtos.TransactionRequestDto;
@@ -22,7 +23,7 @@ import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-
+@QuarkusTest
 public class TransactionServiceTest {
     @InjectMocks
     private TransactionService transactionService;

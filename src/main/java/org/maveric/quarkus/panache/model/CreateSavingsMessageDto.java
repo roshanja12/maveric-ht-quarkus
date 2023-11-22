@@ -6,24 +6,25 @@ import org.maveric.quarkus.panache.enums.Type;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+
 @Data
 public class CreateSavingsMessageDto implements Serializable {
 
-   Long savingsAccountId;
+    Long savingsAccountId;
 
-  String status;
+    String status;
 
-  Long customerId;
+    Long customerId;
 
-  BigDecimal minOpeningBalance;
+    BigDecimal minOpeningBalance;
 
-  InterestCompoundPeriod interestCompoundingPeriod;
+    InterestCompoundPeriod interestCompoundingPeriod;
 
-  Boolean allowOverDraft;
+    Boolean allowOverDraft;
 
-  Type type;
+    Type type;
 
-  String createdAt;
+    String createdAt;
 
-  String city;
+    String city;
 }

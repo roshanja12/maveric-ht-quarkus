@@ -13,10 +13,6 @@ public class SavingsAccountRepository implements PanacheRepository<SavingsAccoun
         return find("savingsAccountId", savingsAccountId).firstResult();
     }
 
-    public  SavingsAccount findByCustomerId(Long customerId){
-        return find("customerId", customerId).firstResult();
-    }
-
     public List<SavingsAccount> findBySavingsAccountListById(Long savingsAccountId){
         return find("savingsAccountId", savingsAccountId).list();
     }
