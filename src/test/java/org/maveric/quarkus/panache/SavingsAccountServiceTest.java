@@ -171,7 +171,9 @@ class SavingsAccountServiceTest {
     @Test
     public void update_account_details_if_data_not_found() {
         Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
-        Assertions.assertThrows(RuntimeException.class, () -> service.updateAccountsDetails(updateAccountsRequestDto));
+        assertThrows(SavingsAccountDetailsNotFoundException.class, () -> {
+            service.updateAccountsDetails(updateAccountsRequestDto);
+        });
     }
 
     @Test
@@ -202,16 +204,21 @@ class SavingsAccountServiceTest {
 
 
     @Test
-    void get_all_saving_account_details_based_on_account_id_no_data_found() throws SavingsAccountDetailsNotFoundException {
-        Mockito.when(repository.findBySavingsAccountId(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
-        service.getSavingAccountDetailBasedOnAccountId(101L);
+    void get_all_saving_account_details_based_on_account_id_no_data_found() {
+
+        Mockito.when(repository.findBySavingsAccountListById(100001L)).thenReturn(null);
+        assertThrows(SavingsAccountDetailsNotFoundException.class, () -> {
+            service.getSavingAccountDetailBasedOnAccountId(100001L);
+        });
 
     }
 
     @Test
-    void get_all_saving_account_details_based_on_customer_id_no_data_found() throws SavingsAccountDetailsNotFoundException {
-        Mockito.when(repository.findByCustomerListById(updateAccountsRequestDto.getSavingAccountId())).thenReturn(null);
-        service.getSavingAccountDetailBasedOnCustomerId(2L);
+    void get_all_saving_account_details_based_on_customer_id_no_data_found() {
+        Mockito.when(repository.findByCustomerListById(2L)).thenReturn(null);
+        assertThrows(SavingsAccountDetailsNotFoundException.class, () -> {
+            service.getSavingAccountDetailBasedOnCustomerId(2L);
+        });
     }
 
     @Test
