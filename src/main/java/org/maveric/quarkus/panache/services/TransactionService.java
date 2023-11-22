@@ -8,6 +8,7 @@ import org.maveric.quarkus.panache.dtos.TransactionRequestDto;
 import org.maveric.quarkus.panache.dtos.TransactionResponseDto;
 import org.maveric.quarkus.panache.enums.TransactionType;
 import org.maveric.quarkus.panache.exceptionHandler.InsufficientFundsException;
+import org.maveric.quarkus.panache.exceptionHandler.InvalidAmountException;
 import org.maveric.quarkus.panache.exceptionHandler.SavingsAccountDetailsNotFoundException;
 import org.maveric.quarkus.panache.model.SavingsAccount;
 import org.maveric.quarkus.panache.model.Transaction;
@@ -34,6 +35,9 @@ public class TransactionService {
     public void deposit(TransactionRequestDto requestDto) {
         Long accountId = requestDto.getAccountId();
         BigDecimal amount = requestDto.getAmount();
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidAmountException("Amount must be greater than 0");
+        }
         SavingsAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
         if (account == null) {
             throw new SavingsAccountDetailsNotFoundException("Account not found");
@@ -52,13 +56,22 @@ public class TransactionService {
     }
     @Transactional
     public void withdraw(TransactionRequestDto requestDto) {
+
         Long accountId = requestDto.getAccountId();
+
         BigDecimal amount = requestDto.getAmount();
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidAmountException("Amount must be greater than 0");
+        }
         SavingsAccount account = savingAccountRepository.findBySavingsAccountId(requestDto.getAccountId());
+        BigDecimal actualBalance=account.getBalance();
         if (Objects.isNull(account)) {
             throw new SavingsAccountDetailsNotFoundException("Account not found");
         }
-        if (account.getBalance().compareTo(amount) < 0) {
+        if(account.getIsAllowOverDraft()) {
+            actualBalance = account.getBalance().add(account.getOverDraftLimit());
+        }
+        if (actualBalance.compareTo(amount) < 0) {
             throw new InsufficientFundsException("Insufficient funds");
         }
         Transaction transaction = new Transaction();
